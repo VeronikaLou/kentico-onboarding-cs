@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.Api", "KenticoOnboardingApplication.Api\KenticoOnboardingApplication.Api.csproj", "{CDD566D1-CA19-4352-816E-D9BA906BD958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.Api.Tests", "KenticoOnboardingApplication.Api.Tests\KenticoOnboardingApplication.Api.Tests.csproj", "{1B8F164A-4090-4E71-9B31-2F658621A211}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDD566D1-CA19-4352-816E-D9BA906BD958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD566D1-CA19-4352-816E-D9BA906BD958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD566D1-CA19-4352-816E-D9BA906BD958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD566D1-CA19-4352-816E-D9BA906BD958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8F164A-4090-4E71-9B31-2F658621A211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8F164A-4090-4E71-9B31-2F658621A211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8F164A-4090-4E71-9B31-2F658621A211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8F164A-4090-4E71-9B31-2F658621A211}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09A8D080-3862-42BB-8BE4-4EA2553C1521}
+	EndGlobalSection
+EndGlobal
