@@ -7,8 +7,13 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestIfAppveyorWorks()
         {
+            var expectedResult = 2;
+
+            var result = 1 + 1;
+
+            Assert.AreEqual(expectedResult, result);
         }
     }
 }
