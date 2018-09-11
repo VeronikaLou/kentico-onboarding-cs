@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/7d6tik6hocvprqvb?svg=true)](https://ci.appveyor.com/project/VeronikaLou/kentico-onboarding-cs)
+
 # kentico-onboarding-cs
 
 #### Summary
