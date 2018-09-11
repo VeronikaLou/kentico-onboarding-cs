@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace KenticoOnboardingApplication.Api.Tests
 {
-    [TestClass]
-    public class UnitTest1
+    [TestFixture]
+    public class AppveyorTest
     {
-        [TestMethod]
+        [Test]
         public void TestIfAppveyorWorks()
         {
             var expectedResult = 2;
