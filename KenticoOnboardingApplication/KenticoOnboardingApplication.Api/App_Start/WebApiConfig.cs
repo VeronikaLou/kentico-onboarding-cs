@@ -7,6 +7,8 @@ namespace KenticoOnboardingApplication.Api
 {
     public static class WebApiConfig
     {
+        internal static readonly string RouteName = "DefaultApi";
+
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -15,7 +17,7 @@ namespace KenticoOnboardingApplication.Api
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: RouteName,
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
