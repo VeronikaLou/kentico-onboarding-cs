@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -10,26 +9,28 @@ namespace KenticoOnboardingApplication.Api.Controllers
 {
     public class ListController : ApiController
     {
-        public readonly Item[] Items =
+        private static readonly Item[] Items =
         {
-            new Item("Learn C#"),
-            new Item("Create dummy controller"),
-            new Item("Connect JS and TS")
+            new Item {Text = "Learn C#"},
+            new Item {Text = "Create dummy controller"},
+            new Item {Text = "Connect JS and TS"}
         };
 
-        public async Task<IHttpActionResult> GetAllItems() => await Task.FromResult(Ok(Items));
+        public async Task<IHttpActionResult> GetAllItems() =>
+            await Task.FromResult(Ok(Items));
 
-        public async Task<IHttpActionResult> GetItem(Guid id) => await Task.FromResult(Ok(Items[0]));
+        public async Task<IHttpActionResult> GetItem(Guid id) =>
+            await Task.FromResult(Ok(Items[0]));
 
-        public async Task<IHttpActionResult> PostItem([FromBody] string value) => await Task.FromResult(
-            Created(
-                new Uri(
-                    new UrlHelper(Request).Route(WebApiConfig.RouteName,
-                        new {id = "d95f4249-6f37-46ab-b102-b55972306910"}),
-                    UriKind.Relative),
-                Items[1]));
+        public async Task<IHttpActionResult> PostItem([FromBody] Item value)
+        {
+            var guid = new {id = "d95f4249-6f37-46ab-b102-b55972306910"};
+            var url = new UrlHelper(Request).Route(WebApiConfig.RouteName, guid);
+            var uri = new Uri(url, UriKind.Relative);
+            return await Task.FromResult(Created(uri, Items[1]));
+        }
 
-        public async Task<IHttpActionResult> PutItem(Guid id, [FromBody] string value) =>
+        public async Task<IHttpActionResult> PutItem(Guid id, [FromBody] Item value) =>
             await Task.FromResult(Ok(Items[0]));
 
         public async Task<IHttpActionResult> DeleteItem(Guid id) =>
