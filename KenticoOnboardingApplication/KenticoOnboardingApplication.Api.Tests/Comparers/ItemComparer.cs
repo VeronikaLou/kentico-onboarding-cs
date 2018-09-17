@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using KenticoOnboardingApplication.Api.Models;
 using NUnit.Framework.Constraints;
 
@@ -10,7 +7,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
 {
     internal static class ComparerWraper
     {
-        private static Lazy<ItemComparer> lazyComparer = new Lazy<ItemComparer>();
+        private static Lazy<ItemComparer> LazyComparer => new Lazy<ItemComparer>();
 
         private sealed class ItemComparer : IEqualityComparer<Item>
         {
@@ -33,6 +30,6 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
         }
 
         public static EqualConstraint UsingItemComparer(this EqualConstraint constraint) =>
-            constraint.Using(lazyComparer.Value);
+            constraint.Using(LazyComparer.Value);
     }
 }
