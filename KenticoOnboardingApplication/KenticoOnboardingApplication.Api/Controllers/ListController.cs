@@ -27,6 +27,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
             var guid = new {id = "d95f4249-6f37-46ab-b102-b55972306910"};
             var url = new UrlHelper(Request).Route(WebApiConfig.RouteName, guid);
             var uri = new Uri(url, UriKind.Relative);
+
             return await Task.FromResult(Created(uri, Items[1]));
         }
 

@@ -16,6 +16,8 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class ListControllerTest
     {
         private ListController _controller;
+        private static readonly Guid Guid = new Guid("d95f4249-6f37-46ab-b102-b55972306910");
+        private static readonly Item Item = new Item {Text = "updated item"};
 
         private static readonly Item[] Items =
         {
@@ -41,41 +43,23 @@ namespace KenticoOnboardingApplication.Api.Tests
             };
         }
 
-        private async Task<(HttpStatusCode status, T value)> GetStatusAndValue<T>(
-            Func<ListController, Task<IHttpActionResult>> action)
-        {
-            var result = await action(_controller);
-            var executedResult = await result.ExecuteAsync(CancellationToken.None);
-            executedResult.TryGetContentValue(out T value);
-            var status = await GetStatus(action);
-            return (status, value);
-        }
-
-        private async Task<HttpStatusCode> GetStatus(Func<ListController, Task<IHttpActionResult>> action)
-        {
-            var result = await action(_controller);
-            var executedResult = await result.ExecuteAsync(CancellationToken.None);
-            return executedResult.StatusCode;
-        }
-
         [Test]
-        public async Task GetAllItems_ReturnsItems()
+        public async Task GetAllItems_ReturnsItemsAndOk()
         {
             var expectedValue = Items;
 
-            (var status, var value) = await GetStatusAndValue<Item[]>(controller => controller.GetAllItems());
+            var (status, value) = await GetStatusAndValue<Item[]>(controller => controller.GetAllItems());
 
             Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).AsCollection.UsingItemComparer());
         }
 
         [Test]
-        public async Task GetItemById_WithGuid_ReturnsItemAndOk()
+        public async Task GetItem_WithGuid_ReturnsItemAndOk()
         {
             var expectedValue = Items[0];
 
-            var guid = new Guid("d95f4249-6f37-46ab-b102-b55972306910");
-            (var status, var value) = await GetStatusAndValue<Item>(controller => controller.GetItem(guid));
+            var (status, value) = await GetStatusAndValue<Item>(controller => controller.GetItem(Guid));
 
             Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -86,8 +70,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items[1];
 
-            var item = new Item {Text = "new item"};
-            (var status, var value) = await GetStatusAndValue<Item>(controller => controller.PostItem(item));
+            var (status, value) = await GetStatusAndValue<Item>(controller => controller.PostItem(Item));
 
             Assert.That(status, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -110,9 +93,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items[0];
 
-            var guid = new Guid("d95f4249-6f37-46ab-b102-b55972306910");
-            var item = new Item {Text = "updated item"};
-            (var status, var value) = await GetStatusAndValue<Item>(controller => controller.PutItem(guid, item));
+            var (status, value) = await GetStatusAndValue<Item>(controller => controller.PutItem(Guid, Item));
 
             Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -121,10 +102,27 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithId_ReturnsNoContent()
         {
-            var guid = new Guid("d95f4249-6f37-46ab-b102-b55972306910");
-            var resultStatus = await GetStatus(controller => controller.DeleteItem(guid));
+            var executedResult = await GetExectuedResult(controller => controller.DeleteItem(Guid));
+            var resultStatus = executedResult.StatusCode;
 
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NoContent));
+        }
+
+        private async Task<(HttpStatusCode status, T value)> GetStatusAndValue<T>(
+            Func<ListController, Task<IHttpActionResult>> action)
+        {
+            var executedResult = await GetExectuedResult(action);
+            executedResult.TryGetContentValue(out T value);
+            var status = executedResult.StatusCode;
+
+            return (status, value);
+        }
+
+        private async Task<HttpResponseMessage> GetExectuedResult(Func<ListController, Task<IHttpActionResult>> action)
+        {
+            var result = await action(_controller);
+
+            return await result.ExecuteAsync(CancellationToken.None);
         }
     }
 }
