@@ -8,7 +8,6 @@ using NUnit.Framework;
 using System.Web.Http;
 using KenticoOnboardingApplication.Api.Models;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
-using RouteParameter = System.Web.Http.RouteParameter;
 
 namespace KenticoOnboardingApplication.Api.Tests
 {
@@ -29,16 +28,9 @@ namespace KenticoOnboardingApplication.Api.Tests
         [SetUp]
         public void SetUp()
         {
-            var config = new HttpConfiguration();
-            config.Routes.MapHttpRoute(
-                WebApiConfig.RouteName,
-                "api/test/{id}",
-                new {id = RouteParameter.Optional}
-            );
-
             _controller = new ListController
             {
-                Configuration = config,
+                Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
             };
         }
@@ -48,9 +40,10 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items;
 
-            var (status, value) = await GetStatusAndValue<Item[]>(controller => controller.GetAllItems());
+            var (executedResult, value) =
+                await GetExecutedResultAndValue<Item[]>(controller => controller.GetAllItems());
 
-            Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).AsCollection.UsingItemComparer());
         }
 
@@ -59,27 +52,30 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items[0];
 
-            var (status, value) = await GetStatusAndValue<Item>(controller => controller.GetItem(Guid));
+            var (executedResult, value) = await GetExecutedResultAndValue<Item>(controller => controller.GetItem(Guid));
 
-            Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
         }
 
         [Test]
         public async Task PostItem_WithItem_ReturnsItemAndCreated()
         {
+            SetPostController();
             var expectedValue = Items[1];
 
-            var (status, value) = await GetStatusAndValue<Item>(controller => controller.PostItem(Item));
+            var (executedResult, value) =
+                await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Item));
 
-            Assert.That(status, Is.EqualTo(HttpStatusCode.Created));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
         }
 
         [Test]
         public async Task PostItem_WithItem_ReturnsLocation()
         {
-            const string expectedLocation = "/api/test/d95f4249-6f37-46ab-b102-b55972306910";
+            SetPostController();
+            const string expectedLocation = "http://localhost/api/test/d95f4249-6f37-46ab-b102-b55972306910";
 
             var result = await _controller.PostItem(new Item {Text = "new item"});
             var executedResult = await result.ExecuteAsync(CancellationToken.None);
@@ -93,9 +89,10 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items[0];
 
-            var (status, value) = await GetStatusAndValue<Item>(controller => controller.PutItem(Guid, Item));
+            var (executedResult, value) =
+                await GetExecutedResultAndValue<Item>(controller => controller.PutItem(Guid, Item));
 
-            Assert.That(status, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
         }
 
@@ -108,14 +105,13 @@ namespace KenticoOnboardingApplication.Api.Tests
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
-        private async Task<(HttpStatusCode status, T value)> GetStatusAndValue<T>(
+        private async Task<(HttpResponseMessage executedResult, T value)> GetExecutedResultAndValue<T>(
             Func<ListController, Task<IHttpActionResult>> action)
         {
             var executedResult = await GetExectuedResult(action);
             executedResult.TryGetContentValue(out T value);
-            var status = executedResult.StatusCode;
 
-            return (status, value);
+            return (executedResult, value);
         }
 
         private async Task<HttpResponseMessage> GetExectuedResult(Func<ListController, Task<IHttpActionResult>> action)
@@ -123,6 +119,19 @@ namespace KenticoOnboardingApplication.Api.Tests
             var result = await action(_controller);
 
             return await result.ExecuteAsync(CancellationToken.None);
+        }
+
+        private void SetPostController()
+        {
+            _controller.Request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("http://localhost/api/test")
+            };
+
+            _controller.Configuration.Routes.MapHttpRoute(
+                name: "Get",
+                routeTemplate: "api/test/{id}",
+                defaults: new { id = RouteParameter.Optional });
         }
     }
 }

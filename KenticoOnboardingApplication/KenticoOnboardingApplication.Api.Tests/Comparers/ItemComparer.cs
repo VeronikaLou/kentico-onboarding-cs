@@ -23,10 +23,10 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
                     return false;
                 }
 
-                return first.IsEdited == second.IsEdited && first.Text == second.Text;
+                return first.Id == second.Id && first.Text == second.Text;
             }
 
-            public int GetHashCode(Item item) => item.IsEdited.GetHashCode() + item.Text.GetHashCode();
+            public int GetHashCode(Item item) => item.Id.GetHashCode() + item.Text.GetHashCode();
         }
 
         public static EqualConstraint UsingItemComparer(this EqualConstraint constraint) =>
