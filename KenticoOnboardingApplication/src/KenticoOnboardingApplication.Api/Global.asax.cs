@@ -8,6 +8,7 @@ namespace KenticoOnboardingApplication.Api
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configure(JsonConfig.Register);
+            GlobalConfiguration.Configure(DependencyConfig.Register);
         }
     }
 }

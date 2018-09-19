@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using KenticoOnboardingApplication.Contracts.Interfaces;
 using KenticoOnboardingApplication.Contracts.Models;
 using Microsoft.Web.Http;
 
@@ -11,32 +12,34 @@ namespace KenticoOnboardingApplication.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     public class ListController : ApiController
     {
-        private static readonly Item[] Items =
+        private readonly IListRepository _repository;
+
+        public ListController(IListRepository repository)
         {
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000001"), Text = "Learn C#"},
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000002"), Text = "Create dummy controller"},
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000003"), Text = "Connect JS and TS"}
-        };
+            _repository = repository;
+        }
 
         [Route]
-        public async Task<IHttpActionResult> GetAllItems() =>
-            await Task.FromResult(Ok(Items));
+        public async Task<IHttpActionResult> GetAllItems()
+        {
+            return await Task.FromResult(Ok(await _repository.GetAllItems()));
+        }    
 
         [Route("{id:guid}", Name = "Get")]
         public async Task<IHttpActionResult> GetItem(Guid id) =>
-            await Task.FromResult(Ok(Items[0]));
+            await Task.FromResult(Ok(await _repository.GetItem(id)));
 
         [Route]
         public async Task<IHttpActionResult> PostItem([FromBody] Item value)
         {
-            var uri = Url.Link("Get", new {id = Items[1].Id});
+            var uri = Url.Link("Get", new {id = "00000000-0000-0000-0000-000000000002"});
 
-            return await Task.FromResult(Created(uri, Items[1]));
+            return await Task.FromResult(Created(uri, await _repository.PostItem(value)));
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutItem(Guid id, [FromBody] Item value) =>
-            await Task.FromResult(Ok(Items[0]));
+            await Task.FromResult(Ok(await _repository.PutItem(id, value)));
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItem(Guid id) =>
