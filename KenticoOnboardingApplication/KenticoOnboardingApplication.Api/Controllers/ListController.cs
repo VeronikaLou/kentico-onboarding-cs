@@ -11,13 +11,11 @@ namespace KenticoOnboardingApplication.Api.Controllers
     [RoutePrefix("api/v{version:apiVersion}/List")]
     public class ListController : ApiController
     {
-        public ListController() { }
-
         private static readonly Item[] Items =
         {
-            new Item {Text = "Learn C#"},
-            new Item {Text = "Create dummy controller"},
-            new Item {Text = "Connect JS and TS"}
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000001"), Text = "Learn C#"},
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000002"), Text = "Create dummy controller"},
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000003"), Text = "Connect JS and TS"}
         };
 
         [Route]
@@ -31,7 +29,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route]
         public async Task<IHttpActionResult> PostItem([FromBody] Item value)
         {
-            var uri = Url.Link("Get", new {id = "d95f4249-6f37-46ab-b102-b55972306910"});
+            var uri = Url.Link("Get", new {id = Items[1].Id});
 
             return await Task.FromResult(Created(uri, Items[1]));
         }
