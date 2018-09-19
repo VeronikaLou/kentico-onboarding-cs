@@ -77,7 +77,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IListRepository.cs" />
+    <Compile Include="IBootstrapper.cs" />
+    <Compile Include="IListRepository.cs" />
+    <Compile Include="IUrlLocator.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
