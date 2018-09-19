@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Http;
-using KenticoOnboardingApplication.Contracts.Interfaces;
+using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Models;
 
 namespace KenticoOnboardingApplication.ListRepository
 {
-    public class ListRepository : IListRepository
+    internal class ListRepository : IListRepository
     {
         private static readonly Item[] Items =
         {
@@ -19,13 +18,10 @@ namespace KenticoOnboardingApplication.ListRepository
 
         public async Task<Item> GetItem(Guid id) => await Task.FromResult(Items[0]);
 
-        public async Task<Item> PostItem(Item item) => await Task.FromResult(Items[1]);
+        public async Task<Item> AddItem(Item item) => await Task.FromResult(Items[1]);
 
-        public async Task<Item> PutItem(Guid id, Item item) => await Task.FromResult(Items[0]);
+        public async Task<Item> UpdateItem(Guid id, Item item) => await Task.FromResult(Items[0]);
 
-        public async Task DeleteItem(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task DeleteItem(Guid id) => await Task.CompletedTask;
     }
 }
