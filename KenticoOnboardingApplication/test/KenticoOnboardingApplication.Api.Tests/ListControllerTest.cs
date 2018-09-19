@@ -15,8 +15,6 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class ListControllerTest
     {
         private ListController _controller;
-        private static readonly Guid Guid = new Guid("d95f4249-6f37-46ab-b102-b55972306910");
-        private static readonly Item Item = new Item {Text = "updated item"};
 
         private static readonly Item[] Items =
         {
@@ -53,7 +51,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedValue = Items[0];
 
             var (executedResult, value) =
-                await GetExecutedResultAndValue<Item>(controller => controller.GetItem(Guid));
+                await GetExecutedResultAndValue<Item>(controller => controller.GetItem(Items[0].Id));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -74,7 +72,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
 
             var (executedResult, value) =
-                await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Item));
+                await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Items[0]));
             var resultLocation = executedResult.Headers.Location.ToString();
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
@@ -88,7 +86,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedValue = Items[0];
 
             var (executedResult, value) =
-                await GetExecutedResultAndValue<Item>(controller => controller.PutItem(Guid, Item));
+                await GetExecutedResultAndValue<Item>(controller => controller.PutItem(Items[0].Id, Items[0]));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -97,7 +95,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithId_ReturnsNoContent()
         {
-            var executedResult = await GetExectuedResult(controller => controller.DeleteItem(Guid));
+            var executedResult = await GetExectuedResult(controller => controller.DeleteItem(Items[0].Id));
             var resultStatus = executedResult.StatusCode;
 
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NoContent));
