@@ -12,7 +12,7 @@ namespace KenticoOnboardingApplication.Api
             {
                 ConstraintMap =
                 {
-                    ["apiVersion"] = typeof( ApiVersionRouteConstraint )
+                    ["apiVersion"] = typeof(ApiVersionRouteConstraint)
                 }
             };
 

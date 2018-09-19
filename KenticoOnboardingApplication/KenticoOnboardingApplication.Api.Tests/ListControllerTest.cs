@@ -52,7 +52,8 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedValue = Items[0];
 
-            var (executedResult, value) = await GetExecutedResultAndValue<Item>(controller => controller.GetItem(Guid));
+            var (executedResult, value) =
+                await GetExecutedResultAndValue<Item>(controller => controller.GetItem(Guid));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -131,7 +132,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             _controller.Configuration.Routes.MapHttpRoute(
                 name: "Get",
                 routeTemplate: "api/test/{id}",
-                defaults: new { id = RouteParameter.Optional });
+                defaults: new {id = RouteParameter.Optional});
         }
     }
 }
