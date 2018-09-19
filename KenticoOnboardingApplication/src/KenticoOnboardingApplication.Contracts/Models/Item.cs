@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KenticoOnboardingApplication.Api.Models
+namespace KenticoOnboardingApplication.Contracts.Models
 {
     public class Item
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using KenticoOnboardingApplication.Api.Models;
 using NUnit.Framework.Constraints;
 
 namespace KenticoOnboardingApplication.Api.Tests.Comparers
