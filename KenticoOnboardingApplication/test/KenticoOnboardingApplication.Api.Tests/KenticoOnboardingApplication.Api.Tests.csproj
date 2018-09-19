@@ -85,6 +85,10 @@
       <Project>{CDD566D1-CA19-4352-816E-D9BA906BD958}</Project>
       <Name>KenticoOnboardingApplication.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\KenticoOnboardingApplication.Contracts\KenticoOnboardingApplication.Contracts.csproj">
+      <Project>{C56BB138-9B16-4CBC-B629-8DE284907F0C}</Project>
+      <Name>KenticoOnboardingApplication.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

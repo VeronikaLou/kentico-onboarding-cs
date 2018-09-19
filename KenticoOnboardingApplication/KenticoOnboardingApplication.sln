@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C030542B-273
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C213F691-F62E-4A1E-9FB3-5C18B4D5B736}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.ListRepository", "src\KenticoOnboardingApplication.ListRepository\KenticoOnboardingApplication.ListRepository.csproj", "{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.Contracts", "src\KenticoOnboardingApplication.Contracts\KenticoOnboardingApplication.Contracts.csproj", "{C56BB138-9B16-4CBC-B629-8DE284907F0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{1B8F164A-4090-4E71-9B31-2F658621A211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B8F164A-4090-4E71-9B31-2F658621A211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B8F164A-4090-4E71-9B31-2F658621A211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56BB138-9B16-4CBC-B629-8DE284907F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56BB138-9B16-4CBC-B629-8DE284907F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56BB138-9B16-4CBC-B629-8DE284907F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56BB138-9B16-4CBC-B629-8DE284907F0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +44,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CDD566D1-CA19-4352-816E-D9BA906BD958} = {C030542B-273D-4772-A9CA-0CF7805F7EAB}
 		{1B8F164A-4090-4E71-9B31-2F658621A211} = {C213F691-F62E-4A1E-9FB3-5C18B4D5B736}
+		{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9} = {C030542B-273D-4772-A9CA-0CF7805F7EAB}
+		{C56BB138-9B16-4CBC-B629-8DE284907F0C} = {C030542B-273D-4772-A9CA-0CF7805F7EAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09A8D080-3862-42BB-8BE4-4EA2553C1521}

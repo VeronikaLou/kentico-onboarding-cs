@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using KenticoOnboardingApplication.Api.Controllers;
 using NUnit.Framework;
 using System.Web.Http;
-using KenticoOnboardingApplication.Api.Models;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
+using KenticoOnboardingApplication.Contracts.Models;
 
 namespace KenticoOnboardingApplication.Api.Tests
 {

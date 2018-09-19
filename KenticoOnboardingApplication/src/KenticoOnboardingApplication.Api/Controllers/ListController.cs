@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using KenticoOnboardingApplication.Api.Models;
+using KenticoOnboardingApplication.Contracts.Models;
 using Microsoft.Web.Http;
 
 namespace KenticoOnboardingApplication.Api.Controllers
