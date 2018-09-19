@@ -7,10 +7,10 @@ namespace KenticoOnboardingApplication.Contracts.Interfaces
 {
     public interface IListRepository
     {
-        Task<IHttpActionResult> GetAllItems();
-        Task<IHttpActionResult> GetItem(Guid id);
-        Task<IHttpActionResult> PostItem(Item item);
-        Task<IHttpActionResult> PutItem(Guid id, Item item);
-        Task<IHttpActionResult> DeleteItem(Guid id);
+        Task<Item[]> GetAllItems();
+        Task<Item> GetItem(Guid id);
+        Task<Item> PostItem(Item item);
+        Task<Item> PutItem(Guid id, Item item);
+        Task DeleteItem(Guid id);
     }
 }
