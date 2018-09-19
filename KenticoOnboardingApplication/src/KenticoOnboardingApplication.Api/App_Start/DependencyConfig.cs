@@ -1,8 +1,8 @@
 ﻿using System.Web.Http;
 using KenticoOnboardingApplication.Api.Utils;
-using KenticoOnboardingApplication.Contracts.Interfaces;
+using KenticoOnboardingApplication.Contracts;
+using KenticoOnboardingApplication.ListRepository;
 using Unity;
-using Unity.Lifetime;
 
 namespace KenticoOnboardingApplication.Api
 {
@@ -10,9 +10,14 @@ namespace KenticoOnboardingApplication.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var container = new UnityContainer();
-            container.RegisterType<IListRepository, ListRepository.ListRepository>(new HierarchicalLifetimeManager());
+            var container = new UnityContainer()
+                .Register<ApiBootstrapper>()
+                .Register<ListRepositoryBootstrapper>();
             config.DependencyResolver = new UnityResolver(container);
         }
+
+        private static IUnityContainer Register<T>(this IUnityContainer container) 
+            where T : IBootstrapper, new() =>
+            new T().Register(container);
     }
 }
