@@ -20,9 +20,9 @@ namespace KenticoOnboardingApplication.Api.Tests
 
         private static readonly Item[] Items =
         {
-            new Item {Text = "Learn C#"},
-            new Item {Text = "Create dummy controller"},
-            new Item {Text = "Connect JS and TS"}
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000001"), Text = "Learn C#"},
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000002"), Text = "Create dummy controller"},
+            new Item {Id = new Guid("00000000-0000-0000-0000-000000000003"), Text = "Connect JS and TS"}
         };
 
         [SetUp]
@@ -60,28 +60,25 @@ namespace KenticoOnboardingApplication.Api.Tests
         }
 
         [Test]
-        public async Task PostItem_WithItem_ReturnsItemAndCreated()
+        public async Task PostItem_WithItem_ReturnsItemAndLocationAndCreated()
         {
-            SetPostController();
+            _controller.Request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("http://localhost/api/test")
+            };
+            _controller.Configuration.Routes.MapHttpRoute(
+                name: "Get",
+                routeTemplate: "api/{id}/test",
+                defaults: new {id = RouteParameter.Optional});
             var expectedValue = Items[1];
+            var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
 
             var (executedResult, value) =
                 await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Item));
+            var resultLocation = executedResult.Headers.Location.ToString();
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
-        }
-
-        [Test]
-        public async Task PostItem_WithItem_ReturnsLocation()
-        {
-            SetPostController();
-            const string expectedLocation = "http://localhost/api/test/d95f4249-6f37-46ab-b102-b55972306910";
-
-            var result = await _controller.PostItem(new Item {Text = "new item"});
-            var executedResult = await result.ExecuteAsync(CancellationToken.None);
-            var resultLocation = executedResult.Headers.Location.ToString();
-
             Assert.That(resultLocation, Is.EqualTo(expectedLocation));
         }
 
@@ -120,19 +117,6 @@ namespace KenticoOnboardingApplication.Api.Tests
             var result = await action(_controller);
 
             return await result.ExecuteAsync(CancellationToken.None);
-        }
-
-        private void SetPostController()
-        {
-            _controller.Request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("http://localhost/api/test")
-            };
-
-            _controller.Configuration.Routes.MapHttpRoute(
-                name: "Get",
-                routeTemplate: "api/test/{id}",
-                defaults: new {id = RouteParameter.Optional});
         }
     }
 }
