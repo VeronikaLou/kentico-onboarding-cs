@@ -7,7 +7,9 @@ using KenticoOnboardingApplication.Api.Controllers;
 using NUnit.Framework;
 using System.Web.Http;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
+using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Models;
+using NSubstitute;
 
 namespace KenticoOnboardingApplication.Api.Tests
 {
@@ -15,6 +17,7 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class ListControllerTest
     {
         private ListController _controller;
+        private readonly IListRepository _repository = Substitute.For<IListRepository>();
 
         private static readonly Item[] Items =
         {
@@ -26,7 +29,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [SetUp]
         public void SetUp()
         {
-            _controller = new ListController
+            _controller = new ListController(_repository)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -36,6 +39,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task GetAllItems_ReturnsItemsAndOk()
         {
+            _repository.GetAllItems().Returns(Task.FromResult(Items));
             var expectedValue = Items;
 
             var (executedResult, value) =
@@ -48,6 +52,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task GetItem_WithGuid_ReturnsItemAndOk()
         {
+            _repository.GetItem(Items[0].Id).Returns(Task.FromResult(Items[0]));
             var expectedValue = Items[0];
 
             var (executedResult, value) =
@@ -60,6 +65,8 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task PostItem_WithItem_ReturnsItemAndLocationAndCreated()
         {
+            _repository.AddItem(Items[1]).Returns(Task.FromResult(Items[1]));
+
             _controller.Request = new HttpRequestMessage
             {
                 RequestUri = new Uri("http://localhost/api/test")
@@ -72,7 +79,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
 
             var (executedResult, value) =
-                await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Items[0]));
+                await GetExecutedResultAndValue<Item>(controller => controller.PostItem(Items[1]));
             var resultLocation = executedResult.Headers.Location.ToString();
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
@@ -83,6 +90,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task PutItem_WithItemAndGuid_ReturnsItemAndOk()
         {
+            _repository.UpdateItem(Items[0].Id, Items[0]).Returns(Task.FromResult(Items[0]));
             var expectedValue = Items[0];
 
             var (executedResult, value) =
@@ -95,6 +103,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithId_ReturnsNoContent()
         {
+            _repository.DeleteItem(Items[0].Id).Returns(Task.CompletedTask);
             var executedResult = await GetExectuedResult(controller => controller.DeleteItem(Items[0].Id));
             var resultStatus = executedResult.StatusCode;
 
