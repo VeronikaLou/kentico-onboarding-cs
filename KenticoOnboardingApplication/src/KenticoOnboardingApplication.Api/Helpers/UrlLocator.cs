@@ -16,9 +16,8 @@ namespace KenticoOnboardingApplication.Api.Helpers
         public Uri GetUri(Guid id)
         {
             var url = _urlHelper.Link("Get", new {id});
-            var uri = new Uri(url);
 
-            return uri;
+            return new Uri(url);
         }
     }
 }

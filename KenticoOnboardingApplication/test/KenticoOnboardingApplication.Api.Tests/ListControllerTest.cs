@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using KenticoOnboardingApplication.Api.Controllers;
 using NUnit.Framework;
 using System.Web.Http;
+using System.Web.Http.Routing;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Models;
@@ -18,6 +19,7 @@ namespace KenticoOnboardingApplication.Api.Tests
     {
         private ListController _controller;
         private readonly IListRepository _repository = Substitute.For<IListRepository>();
+        private readonly IUrlLocator _urlLocator = Substitute.For<IUrlLocator>();
 
         private static readonly Item[] Items =
         {
@@ -29,7 +31,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [SetUp]
         public void SetUp()
         {
-            _controller = new ListController(_repository)
+            _controller = new ListController(_repository, _urlLocator)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -66,15 +68,8 @@ namespace KenticoOnboardingApplication.Api.Tests
         public async Task PostItem_WithItem_ReturnsItemAndLocationAndCreated()
         {
             _repository.AddItem(Items[1]).Returns(Task.FromResult(Items[1]));
-
-            _controller.Request = new HttpRequestMessage
-            {
-                RequestUri = new Uri("http://localhost/api/test")
-            };
-            _controller.Configuration.Routes.MapHttpRoute(
-                name: "Get",
-                routeTemplate: "api/{id}/test",
-                defaults: new {id = RouteParameter.Optional});
+            _urlLocator.GetUri(Items[1].Id).Returns(new Uri($"http://localhost/api/{Items[1].Id}/test"));
+            
             var expectedValue = Items[1];
             var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
 
