@@ -26,8 +26,7 @@ namespace KenticoOnboardingApplication.Api.Tests
 
         private static bool CheckItemFormat(object item, Guid id)
         {
-            var routeValue = new RouteValueDictionary(item);
-            var itemId = routeValue["id"];
+            var itemId = new RouteValueDictionary(item)["id"];
             return itemId is Guid && itemId.Equals(id);
         }
     }
