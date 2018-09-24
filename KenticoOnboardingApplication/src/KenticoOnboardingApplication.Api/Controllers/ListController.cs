@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using KenticoOnboardingApplication.Contracts;
+using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using Microsoft.Web.Http;
 
@@ -22,29 +23,29 @@ namespace KenticoOnboardingApplication.Api.Controllers
         }
 
         [Route]
-        public async Task<IHttpActionResult> GetAllItems() =>
-            Ok(await _repository.GetAllItems());
+        public async Task<IHttpActionResult> GetAllItemsAsync() =>
+            Ok(await _repository.GetAllItemsAsync());
 
         [Route("{id:guid}", Name = "Get")]
-        public async Task<IHttpActionResult> GetItem(Guid id) =>
-            Ok(await _repository.GetItem(id));
+        public async Task<IHttpActionResult> GetItemAsync(Guid id) =>
+            Ok(await _repository.GetItemAsync(id));
 
         [Route]
-        public async Task<IHttpActionResult> PostItem([FromBody] Item value)
+        public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
             var uri = _urlLocator.GetUri(value.Id);
 
-            return Created(uri, await _repository.AddItem(value));
+            return Created(uri, await _repository.AddItemAsync(value));
         }
 
         [Route("{id:guid}")]
-        public async Task<IHttpActionResult> PutItem(Guid id, [FromBody] Item value) =>
-            Ok(await _repository.UpdateItem(id, value));
+        public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value) =>
+            Ok(await _repository.UpdateItemAsync(id, value));
 
         [Route("{id:guid}")]
-        public async Task<IHttpActionResult> DeleteItem(Guid id)
+        public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
         {
-            await _repository.DeleteItem(id);
+            await _repository.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
