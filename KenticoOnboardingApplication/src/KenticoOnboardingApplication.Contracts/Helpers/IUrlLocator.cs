@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KenticoOnboardingApplication.Contracts
+namespace KenticoOnboardingApplication.Contracts.Helpers
 {
     public interface IUrlLocator
     {
