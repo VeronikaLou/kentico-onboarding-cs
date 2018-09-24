@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Http.Routing;
-using KenticoOnboardingApplication.Contracts;
+using KenticoOnboardingApplication.Contracts.Helpers;
 
 namespace KenticoOnboardingApplication.Api.Helpers
 {
