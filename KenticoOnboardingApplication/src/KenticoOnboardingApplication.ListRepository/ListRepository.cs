@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Models;
@@ -14,14 +15,14 @@ namespace KenticoOnboardingApplication.ListRepository
             new Item {Id = new Guid("00000000-0000-0000-0000-000000000003"), Text = "Connect JS and TS"}
         };
 
-        public async Task<Item[]> GetAllItems() => await Task.FromResult(Items);
+        public async Task<IEnumerable<Item>> GetAllItemsAsync() => await Task.FromResult(Items);
 
-        public async Task<Item> GetItem(Guid id) => await Task.FromResult(Items[0]);
+        public async Task<Item> GetItemAsync(Guid id) => await Task.FromResult(Items[0]);
 
-        public async Task<Item> AddItem(Item item) => await Task.FromResult(Items[1]);
+        public async Task<Item> AddItemAsync(Item item) => await Task.FromResult(Items[1]);
 
-        public async Task<Item> UpdateItem(Guid id, Item item) => await Task.FromResult(Items[0]);
+        public async Task<Item> UpdateItemAsync(Guid id, Item item) => await Task.FromResult(Items[0]);
 
-        public async Task DeleteItem(Guid id) => await Task.CompletedTask;
+        public async Task DeleteItemAsync(Guid id) => await Task.CompletedTask;
     }
 }

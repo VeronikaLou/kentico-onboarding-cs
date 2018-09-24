@@ -79,7 +79,7 @@
   <ItemGroup>
     <Compile Include="IBootstrapper.cs" />
     <Compile Include="IListRepository.cs" />
-    <Compile Include="IUrlLocator.cs" />
+    <Compile Include="Helpers\IUrlLocator.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
