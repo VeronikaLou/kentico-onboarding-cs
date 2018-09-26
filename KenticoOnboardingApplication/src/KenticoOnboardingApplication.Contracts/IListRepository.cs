@@ -10,7 +10,7 @@ namespace KenticoOnboardingApplication.Contracts
         Task<IEnumerable<Item>> GetAllItemsAsync();
         Task<Item> GetItemAsync(Guid id);
         Task<Item> AddItemAsync(Item item);
-        Task<Item> UpdateItemAsync(Guid id, Item item);
+        Task<Item> UpdateItemAsync(Item item);
         Task DeleteItemAsync(Guid id);
     }
 }

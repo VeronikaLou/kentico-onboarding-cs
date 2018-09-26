@@ -21,7 +21,7 @@ namespace KenticoOnboardingApplication.ListRepository
 
         public async Task<Item> AddItemAsync(Item item) => await Task.FromResult(Items[1]);
 
-        public async Task<Item> UpdateItemAsync(Guid id, Item item) => await Task.FromResult(Items[0]);
+        public async Task<Item> UpdateItemAsync(Item item) => await Task.FromResult(Items[0]);
 
         public async Task DeleteItemAsync(Guid id) => await Task.CompletedTask;
     }
