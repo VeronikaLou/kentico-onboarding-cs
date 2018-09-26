@@ -71,7 +71,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
             var expectedValue = Items[1];
             _repository.AddItemAsync(Arg.Any<Item>()).Returns(Task.FromResult(Items[1]));
-            _urlLocator.GetUri(Arg.Any<Guid>()).Returns(new Uri(expectedLocation));
+            _urlLocator.GetListItemUri(Arg.Any<Guid>()).Returns(new Uri(expectedLocation));
 
 
             var (executedResult, value) =
@@ -86,7 +86,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task PutItem_WithItemAndGuid_ReturnsItemAndOk()
         {
-            _repository.UpdateItemAsync(Arg.Any<Guid>(), Arg.Any<Item>()).Returns(Task.FromResult(Items[0]));
+            _repository.UpdateItemAsync(Arg.Any<Item>()).Returns(Task.FromResult(Items[0]));
             var expectedValue = Items[0];
 
             var (executedResult, value) =
