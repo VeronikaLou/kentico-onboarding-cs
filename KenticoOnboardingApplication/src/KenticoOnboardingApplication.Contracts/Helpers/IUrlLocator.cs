@@ -4,6 +4,6 @@ namespace KenticoOnboardingApplication.Contracts.Helpers
 {
     public interface IUrlLocator
     {
-        Uri GetUri(Guid id);
+        Uri GetListItemUri(Guid id);
     }
 }

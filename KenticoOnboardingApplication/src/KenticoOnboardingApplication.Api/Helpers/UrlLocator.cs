@@ -7,15 +7,16 @@ namespace KenticoOnboardingApplication.Api.Helpers
     public class UrlLocator : IUrlLocator
     {
         private readonly UrlHelper _urlHelper;
+        private const string RouteGet = "Get";
 
         public UrlLocator(UrlHelper urlHelper)
         {
             _urlHelper = urlHelper;
         }
 
-        public Uri GetUri(Guid id)
+        public Uri GetListItemUri(Guid id)
         {
-            var url = _urlHelper.Link("Get", new {id});
+            var url = _urlHelper.Link(RouteGet, new {id});
 
             return new Uri(url);
         }
