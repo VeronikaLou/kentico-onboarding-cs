@@ -6,20 +6,20 @@ using Unity.Exceptions;
 
 namespace KenticoOnboardingApplication.Api.Utils
 {
-    public class UnityResolver : IDependencyResolver
+    internal sealed class UnityResolver : IDependencyResolver
     {
-        protected IUnityContainer Container;
+        private readonly IUnityContainer _container;
 
         public UnityResolver(IUnityContainer container)
         {
-            Container = container ?? throw new ArgumentNullException("container");
+            _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         public object GetService(Type serviceType)
         {
             try
             {
-                return Container.Resolve(serviceType);
+                return _container.Resolve(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -31,7 +31,7 @@ namespace KenticoOnboardingApplication.Api.Utils
         {
             try
             {
-                return Container.ResolveAll(serviceType);
+                return _container.ResolveAll(serviceType);
             }
             catch (ResolutionFailedException)
             {
@@ -41,18 +41,10 @@ namespace KenticoOnboardingApplication.Api.Utils
 
         public IDependencyScope BeginScope()
         {
-            var child = Container.CreateChildContainer();
+            var child = _container.CreateChildContainer();
             return new UnityResolver(child);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            Container.Dispose();
-        }
+        public void Dispose() => _container.Dispose();
     }
 }

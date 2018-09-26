@@ -11,6 +11,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
 {
     [ApiVersion("1.0")]
     [RoutePrefix("api/v{version:apiVersion}/List")]
+    [Route]
     public class ListController : ApiController
     {
         private readonly IListRepository _repository;
@@ -22,7 +23,6 @@ namespace KenticoOnboardingApplication.Api.Controllers
             _urlLocator = locator;
         }
 
-        [Route]
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
             Ok(await _repository.GetAllItemsAsync());
 
@@ -30,17 +30,17 @@ namespace KenticoOnboardingApplication.Api.Controllers
         public async Task<IHttpActionResult> GetItemAsync(Guid id) =>
             Ok(await _repository.GetItemAsync(id));
 
-        [Route]
         public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
-            var uri = _urlLocator.GetUri(value.Id);
+            var uri = _urlLocator.GetListItemUri(value.Id);
+            var item = await _repository.AddItemAsync(value);
 
-            return Created(uri, await _repository.AddItemAsync(value));
+            return Created(uri, item);
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value) =>
-            Ok(await _repository.UpdateItemAsync(id, value));
+            Ok(await _repository.UpdateItemAsync(value));
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
