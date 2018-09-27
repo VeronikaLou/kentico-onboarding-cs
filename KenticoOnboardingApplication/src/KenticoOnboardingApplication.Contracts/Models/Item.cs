@@ -7,9 +7,6 @@ namespace KenticoOnboardingApplication.Contracts.Models
         public Guid Id { get; set; }
         public string Text { get; set; }
 
-        public override string ToString()
-        {
-            return $"Item {Id} = {Text}";
-        }
+        public override string ToString() => $"Item {Id} = {Text}";
     }
 }
