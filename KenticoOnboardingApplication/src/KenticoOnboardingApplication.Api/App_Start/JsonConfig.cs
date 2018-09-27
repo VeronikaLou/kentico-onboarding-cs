@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace KenticoOnboardingApplication.Api
 {
-    public static class JsonConfig
+    internal static class JsonConfig
     {
         public static void Register(HttpConfiguration config)
         {

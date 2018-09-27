@@ -6,7 +6,7 @@ using Unity;
 
 namespace KenticoOnboardingApplication.Api
 {
-    public static class DependencyConfig
+    internal static class DependencyConfig
     {
         public static void Register(HttpConfiguration config)
         {
