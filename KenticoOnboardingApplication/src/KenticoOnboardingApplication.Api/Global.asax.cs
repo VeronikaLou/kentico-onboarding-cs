@@ -6,7 +6,7 @@ namespace KenticoOnboardingApplication.Api
     {
         protected void Application_Start()
         {
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(RouteConfig.Register);
             GlobalConfiguration.Configure(JsonConfig.Register);
             GlobalConfiguration.Configure(DependencyConfig.Register);
         }

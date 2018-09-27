@@ -4,7 +4,7 @@ using Microsoft.Web.Http.Routing;
 
 namespace KenticoOnboardingApplication.Api
 {
-    public static class WebApiConfig
+    internal static class RouteConfig
     {
         public static void Register(HttpConfiguration config)
         {
