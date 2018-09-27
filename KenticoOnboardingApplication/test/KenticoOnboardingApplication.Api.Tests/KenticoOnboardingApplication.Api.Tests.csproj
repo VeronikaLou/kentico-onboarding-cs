@@ -108,7 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\ItemComparer.cs" />
+    <Compile Include="Comparers\EqualConstraintExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ListControllerTest.cs" />
     <Compile Include="UrlLocatorTest.cs" />
