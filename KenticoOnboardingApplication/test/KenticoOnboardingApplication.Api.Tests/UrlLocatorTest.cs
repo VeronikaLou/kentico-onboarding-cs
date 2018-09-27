@@ -11,17 +11,23 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class UrlLocatorTest
     {
         [Test]
-        public void GetUri_ReturnsUri()
+        public void GetListItemUri_WithGuid_ReturnsUriWithGuid()
         {
             var id = new Guid("00000000-0000-0000-0000-000000000001");
-            var expectedUrl = $"http://location/api/List/{id}/test";
-            var expectedUri = new Uri(expectedUrl);
-            var urlHelper = Substitute.For<UrlHelper>();
-            urlHelper.Link("Get", Arg.Is<object>(item => CheckItemFormat(item, id))).Returns(expectedUrl);
+            var expectedUri = new Uri($"http://location/api/List/{id}/test");
+            var locator = CreateLocator(id, expectedUri);
 
-            var resultUri = new UrlLocator(urlHelper).GetListItemUri(id);
+            var resultUri = locator.GetListItemUri(id);
 
             Assert.That(expectedUri, Is.EqualTo(resultUri));
+        }
+
+        private static UrlLocator CreateLocator(Guid id, Uri uri)
+        {
+            var urlHelper = Substitute.For<UrlHelper>();
+            urlHelper.Link("Get", Arg.Is<object>(item => CheckItemFormat(item, id))).Returns(uri.ToString());
+
+            return new UrlLocator(urlHelper);
         }
 
         private static bool CheckItemFormat(object item, Guid id)

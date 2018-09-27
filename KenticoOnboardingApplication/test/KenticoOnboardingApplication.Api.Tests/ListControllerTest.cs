@@ -8,9 +8,9 @@ using KenticoOnboardingApplication.Api.Controllers;
 using NUnit.Framework;
 using System.Web.Http;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
-using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
+using KenticoOnboardingApplication.Contracts.Repositories;
 using NSubstitute;
 
 namespace KenticoOnboardingApplication.Api.Tests
@@ -19,8 +19,8 @@ namespace KenticoOnboardingApplication.Api.Tests
     public class ListControllerTest
     {
         private ListController _controller;
-        private readonly IListRepository _repository = Substitute.For<IListRepository>();
-        private readonly IUrlLocator _urlLocator = Substitute.For<IUrlLocator>();
+        private IListRepository _repository;
+        private IUrlLocator _urlLocator;
 
         private static readonly Item[] Items =
         {
@@ -32,6 +32,8 @@ namespace KenticoOnboardingApplication.Api.Tests
         [SetUp]
         public void SetUp()
         {
+            _repository = Substitute.For<IListRepository>();
+            _urlLocator = Substitute.For<IUrlLocator>();
             _controller = new ListController(_repository, _urlLocator)
             {
                 Configuration = new HttpConfiguration(),
@@ -43,26 +45,26 @@ namespace KenticoOnboardingApplication.Api.Tests
         public async Task GetAllItems_ReturnsItemsAndOk()
         {
             _repository.GetAllItemsAsync().Returns(Task.FromResult<IEnumerable<Item>>(Items));
-            var expectedValue = Items;
+            var expectedItems = Items;
 
-            var (executedResult, value) =
+            var (executedResult, items) =
                 await GetExecutedResultAndValue<Item[]>(controller => controller.GetAllItemsAsync());
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(value, Is.EqualTo(expectedValue).AsCollection.UsingItemComparer());
+            Assert.That(items, Is.EqualTo(expectedItems).AsCollection.UsingItemComparer());
         }
 
         [Test]
         public async Task GetItem_WithGuid_ReturnsItemAndOk()
         {
-            _repository.GetItemAsync(Arg.Any<Guid>()).Returns(Task.FromResult(Items[0]));
+            _repository.GetItemAsync(Items[0].Id).Returns(Task.FromResult(Items[0]));
             var expectedValue = Items[0];
 
-            var (executedResult, value) =
+            var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller => controller.GetItemAsync(Items[0].Id));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
+            Assert.That(item, Is.EqualTo(expectedValue).UsingItemComparer());
         }
 
         [Test]
@@ -70,39 +72,38 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             var expectedLocation = $"http://localhost/api/{Items[1].Id}/test";
             var expectedValue = Items[1];
-            _repository.AddItemAsync(Arg.Any<Item>()).Returns(Task.FromResult(Items[1]));
-            _urlLocator.GetListItemUri(Arg.Any<Guid>()).Returns(new Uri(expectedLocation));
+            _repository.AddItemAsync(Items[1]).Returns(Task.FromResult(Items[1]));
+            _urlLocator.GetListItemUri(Items[1].Id).Returns(new Uri(expectedLocation));
 
-
-            var (executedResult, value) =
+            var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller => controller.PostItemAsync(Items[1]));
             var resultLocation = executedResult.Headers.Location.ToString();
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
+            Assert.That(item, Is.EqualTo(expectedValue).UsingItemComparer());
             Assert.That(resultLocation, Is.EqualTo(expectedLocation));
         }
 
         [Test]
         public async Task PutItem_WithItemAndGuid_ReturnsItemAndOk()
         {
-            _repository.UpdateItemAsync(Arg.Any<Item>()).Returns(Task.FromResult(Items[0]));
+            _repository.UpdateItemAsync(Items[0]).Returns(Task.FromResult(Items[0]));
             var expectedValue = Items[0];
 
-            var (executedResult, value) =
+            var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller => controller.PutItemAsync(Items[0].Id, Items[0]));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(value, Is.EqualTo(expectedValue).UsingItemComparer());
+            Assert.That(item, Is.EqualTo(expectedValue).UsingItemComparer());
         }
 
         [Test]
         public async Task DeleteItem_WithId_ReturnsNoContent()
         {
-            _repository.DeleteItemAsync(Arg.Any<Guid>()).Returns(Task.CompletedTask);
             var executedResult = await GetExectuedResult(controller => controller.DeleteItemAsync(Items[0].Id));
             var resultStatus = executedResult.StatusCode;
 
+            await _repository.Received().DeleteItemAsync(Items[0].Id);
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NoContent));
         }
 
