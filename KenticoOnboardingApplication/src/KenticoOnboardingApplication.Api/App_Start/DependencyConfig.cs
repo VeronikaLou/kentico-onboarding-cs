@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using KenticoOnboardingApplication.Api.Utils;
 using KenticoOnboardingApplication.Contracts;
-using KenticoOnboardingApplication.ListRepository;
+using KenticoOnboardingApplication.Repositories;
 using Unity;
 
 namespace KenticoOnboardingApplication.Api
