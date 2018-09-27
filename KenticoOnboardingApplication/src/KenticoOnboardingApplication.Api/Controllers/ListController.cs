@@ -5,6 +5,7 @@ using System.Web.Http;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
+using KenticoOnboardingApplication.Contracts.Repositories;
 using Microsoft.Web.Http;
 
 namespace KenticoOnboardingApplication.Api.Controllers

@@ -12,7 +12,7 @@ namespace KenticoOnboardingApplication.Api
         {
             var container = new UnityContainer()
                 .Register<ApiBootstrapper>()
-                .Register<ListRepositoryBootstrapper>();
+                .Register<RepositoriesBootstraper>();
             config.DependencyResolver = new UnityResolver(container);
         }
 

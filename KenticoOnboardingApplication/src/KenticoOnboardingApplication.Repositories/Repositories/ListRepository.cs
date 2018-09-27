@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Models;
+using KenticoOnboardingApplication.Contracts.Repositories;
 
 namespace KenticoOnboardingApplication.ListRepository
 {

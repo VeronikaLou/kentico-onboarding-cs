@@ -152,9 +152,9 @@
       <Project>{c56bb138-9b16-4cbc-b629-8de284907f0c}</Project>
       <Name>KenticoOnboardingApplication.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KenticoOnboardingApplication.ListRepository\KenticoOnboardingApplication.ListRepository.csproj">
+    <ProjectReference Include="..\KenticoOnboardingApplication.Repositories\KenticoOnboardingApplication.Repositories.csproj">
       <Project>{D017FA68-EC5B-4EF0-BA0E-EA1DB821A1D9}</Project>
-      <Name>KenticoOnboardingApplication.ListRepository</Name>
+      <Name>KenticoOnboardingApplication.Repositories</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
