@@ -4,16 +4,14 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Exceptions;
 
-namespace KenticoOnboardingApplication.Api.Utils
+namespace KenticoOnboardingApplication.Api.Resolvers
 {
     internal sealed class UnityResolver : IDependencyResolver
     {
         private readonly IUnityContainer _container;
 
-        public UnityResolver(IUnityContainer container)
-        {
+        public UnityResolver(IUnityContainer container) =>
             _container = container ?? throw new ArgumentNullException(nameof(container));
-        }
 
         public object GetService(Type serviceType)
         {

@@ -1,5 +1,5 @@
 ﻿using System.Web.Http;
-using KenticoOnboardingApplication.Api.Utils;
+using KenticoOnboardingApplication.Api.Resolvers;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Repositories;
 using Unity;
