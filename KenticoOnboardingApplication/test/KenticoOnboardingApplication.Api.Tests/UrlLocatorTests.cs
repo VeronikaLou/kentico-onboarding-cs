@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace KenticoOnboardingApplication.Api.Tests
 {
     [TestFixture]
-    public class UrlLocatorTest
+    public class UrlLocatorTests
     {
         [Test]
         public void GetListItemUri_WithGuid_ReturnsUriWithGuid()

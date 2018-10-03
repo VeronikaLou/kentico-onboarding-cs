@@ -16,7 +16,7 @@ using NSubstitute;
 namespace KenticoOnboardingApplication.Api.Tests
 {
     [TestFixture]
-    public class ListControllerTest
+    public class ListControllerTests
     {
         private ListController _controller;
         private IListRepository _repository;
