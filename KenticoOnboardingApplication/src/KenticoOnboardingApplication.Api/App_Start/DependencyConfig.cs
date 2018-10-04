@@ -10,13 +10,17 @@ namespace KenticoOnboardingApplication.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var container = new UnityContainer()
-                .Register<ApiBootstrapper>()
-                .Register<RepositoriesBootstraper>();
+            var container = new UnityContainer();
+            RegisterDependencies(container);
             config.DependencyResolver = new UnityResolver(container);
         }
 
-        private static IUnityContainer Register<T>(this IUnityContainer container) 
+        internal static void RegisterDependencies(IUnityContainer container) =>
+            container
+                .Register<ApiBootstrapper>()
+                .Register<RepositoriesBootstraper>();
+
+        private static IUnityContainer Register<T>(this IUnityContainer container)
             where T : IBootstrapper, new() =>
             new T().Register(container);
     }
