@@ -3,95 +3,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using KenticoOnboardingApplication.Contracts;
+using NSubstitute;
 using NUnit.Framework;
 using Unity;
-using Unity.Extension;
-using Unity.Lifetime;
-using Unity.Registration;
-using Unity.Resolution;
 
 namespace KenticoOnboardingApplication.Api.Tests
 {
     [TestFixture]
     public class DependencyConfigTests
     {
-        [Test]
-        public void Register_RegistersCorrectDependencies()
+        private static readonly IEnumerable<Type> s_excludedContractsTypes = new[]
         {
-            // dat IBootstrapper a HttpReqMes do kolekci
-            var notRegisteredTypes = new List<Type>
-            {
-                typeof(IBootstrapper)
-            };
+            typeof(IBootstrapper)
+        };
 
-            var contractsAssembly = typeof(IBootstrapper).Assembly;
-            var expectedRegistrations = contractsAssembly
-                .GetTypes()
-                .Where(type => type.IsInterface && !notRegisteredTypes.Contains(type))
-                .ToList();
-            expectedRegistrations.Add(typeof(HttpRequestMessage));
+        private static readonly IEnumerable<Type> s_expectedRegistrationTypes = new[]
+        {
+            typeof(HttpRequestMessage)
+        };
 
-            foreach (var registration in expectedRegistrations)
-            {
-                Console.WriteLine(registration);
-            }
-
-            Console.WriteLine();
-
-
-            var actualRegistrations = new List<Type>();
-            ;
-            var container = new MockContainer(actualRegistrations);
+        [Test]
+        public void RegisterDependencies_RegistersCorrectDependencies()
+        {
+            var expectedRegistrationTypes = GetExpectedRegistrationTypes();
+            var resultRegistrationTypes = new List<Type>();
+            var container = CreateContainer(resultRegistrationTypes);
 
             DependencyConfig.RegisterDependencies(container);
-            var resultRegistrations = container.RegisteredTypes
-                .ToArray();
 
-            foreach (var registration in resultRegistrations)
-            {
-                Console.WriteLine(registration);
-            }
-
-            Assert.That(resultRegistrations.Except(expectedRegistrations), Is.Empty);
-            Assert.That(expectedRegistrations.Except(resultRegistrations), Is.Empty);
+            Assert.That(resultRegistrationTypes.Except(expectedRegistrationTypes), Is.Empty, "Some redundant types were registred.");
+            Assert.That(expectedRegistrationTypes.Except(resultRegistrationTypes), Is.Empty, "Not all expected types were registered.");
         }
-    }
 
-    internal class MockContainer : IUnityContainer
-    {
-        public ICollection<Type> RegisteredTypes { get; }
-
-        public MockContainer(ICollection<Type> registeredTypes) => RegisteredTypes = registeredTypes;
-        
-        public IEnumerable<IContainerRegistration> Registrations => throw new NotImplementedException();
-
-        public IUnityContainer RegisterType(Type typeFrom, Type typeTo, string name, LifetimeManager lifetimeManager,
-            params InjectionMember[] injectionMembers)
-
+        private static IUnityContainer CreateContainer(ICollection<Type> resultRegistrationTypes)
         {
-            RegisteredTypes.Add(typeFrom);
-            return this;
+            var container = Substitute.For<IUnityContainer>();
+            container.RegisterType(Arg.Any<Type>(), Arg.Any<Type>()).ReturnsForAnyArgs(
+                callInfo =>
+                {
+                    var typeFrom = callInfo.ArgAt<Type>(0);
+                    var typeTo = callInfo.ArgAt<Type>(1);
+                    resultRegistrationTypes.Add(typeFrom ?? typeTo);
+                    return container;
+                });
+
+            return container;
         }
 
-        public bool IsRegistered(Type type, string name) => throw new NotImplementedException();
+        private static List<Type> GetExpectedRegistrationTypes()
+        {
+            var contractsAssembly = typeof(IBootstrapper).Assembly;
+            var expectedContractsTypes = contractsAssembly
+                .GetTypes()
+                .Where(type => type.IsInterface && !s_excludedContractsTypes.Contains(type))
+                .ToList();
+            expectedContractsTypes.AddRange(s_expectedRegistrationTypes);
 
-        public IUnityContainer Parent => throw new NotImplementedException();
-
-        public void Dispose() => throw new NotImplementedException();
-
-        public IUnityContainer RegisterInstance(Type type, string name, object instance, LifetimeManager lifetime) =>
-            throw new NotImplementedException();
-
-        public object Resolve(Type type, string name, params ResolverOverride[] resolverOverrides) =>
-            throw new NotImplementedException();
-
-        public object BuildUp(Type type, object existing, string name, params ResolverOverride[] resolverOverrides) =>
-            throw new NotImplementedException();
-
-        public IUnityContainer AddExtension(UnityContainerExtension extension) => throw new NotImplementedException();
-
-        public object Configure(Type configurationInterface) => throw new NotImplementedException();
-
-        public IUnityContainer CreateChildContainer() => throw new NotImplementedException();
+            return expectedContractsTypes;
+        }
     }
 }
