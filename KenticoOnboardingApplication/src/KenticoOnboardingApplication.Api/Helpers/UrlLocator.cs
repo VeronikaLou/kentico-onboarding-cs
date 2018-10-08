@@ -7,12 +7,9 @@ namespace KenticoOnboardingApplication.Api.Helpers
     public class UrlLocator : IUrlLocator
     {
         private readonly UrlHelper _urlHelper;
-        private const string RouteGet = "Get";
+        public const string RouteGet = "Get";
 
-        public UrlLocator(UrlHelper urlHelper)
-        {
-            _urlHelper = urlHelper;
-        }
+        public UrlLocator(UrlHelper urlHelper) => _urlHelper = urlHelper;
 
         public Uri GetListItemUri(Guid id)
         {

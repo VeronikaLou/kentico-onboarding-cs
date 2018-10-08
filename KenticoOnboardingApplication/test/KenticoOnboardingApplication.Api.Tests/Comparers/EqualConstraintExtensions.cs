@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KenticoOnboardingApplication.Contracts.Models;
 using NUnit.Framework.Constraints;
 
 namespace KenticoOnboardingApplication.Api.Tests.Comparers
 {
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     internal static class ComparerWraper
     {
         private static Lazy<ItemComparer> LazyComparer => new Lazy<ItemComparer>();

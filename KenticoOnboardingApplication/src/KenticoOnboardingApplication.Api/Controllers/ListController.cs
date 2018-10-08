@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using KenticoOnboardingApplication.Api.Helpers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
@@ -26,7 +27,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
             Ok(await _repository.GetAllItemsAsync());
 
-        [Route("{id:guid}", Name = "Get")]
+        [Route("{id:guid}", Name = UrlLocator.RouteGet)]
         public async Task<IHttpActionResult> GetItemAsync(Guid id) =>
             Ok(await _repository.GetItemAsync(id));
 
