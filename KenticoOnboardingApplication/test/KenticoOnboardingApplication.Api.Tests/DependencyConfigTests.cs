@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using KenticoOnboardingApplication.Contracts;
+using NSubstitute;
+using NUnit.Framework;
+using Unity;
+
+namespace KenticoOnboardingApplication.Api.Tests
+{
+    [TestFixture]
+    public class DependencyConfigTests
+    {
+        private static readonly IEnumerable<Type> s_excludedContractsTypes = new[]
+        {
+            typeof(IBootstrapper)
+        };
+
+        private static readonly IEnumerable<Type> s_expectedRegistrationTypes = new[]
+        {
+            typeof(HttpRequestMessage)
+        };
+
+        [Test]
+        public void RegisterDependencies_RegistersCorrectDependencies()
+        {
+            var expectedRegistrationTypes = GetExpectedRegistrationTypes();
+            var resultRegistrationTypes = new List<Type>();
+            var container = CreateContainer(resultRegistrationTypes);
+
+            DependencyConfig.RegisterDependencies(container);
+
+            Assert.That(resultRegistrationTypes.Except(expectedRegistrationTypes), Is.Empty, "Some redundant types were registred.");
+            Assert.That(expectedRegistrationTypes.Except(resultRegistrationTypes), Is.Empty, "Not all expected types were registered.");
+        }
+
+        private static IUnityContainer CreateContainer(ICollection<Type> resultRegistrationTypes)
+        {
+            var container = Substitute.For<IUnityContainer>();
+            container.RegisterType(Arg.Any<Type>(), Arg.Any<Type>()).ReturnsForAnyArgs(
+                callInfo =>
+                {
+                    var typeFrom = callInfo.ArgAt<Type>(0);
+                    var typeTo = callInfo.ArgAt<Type>(1);
+                    resultRegistrationTypes.Add(typeFrom ?? typeTo);
+                    return container;
+                });
+
+            return container;
+        }
+
+        private static List<Type> GetExpectedRegistrationTypes()
+        {
+            var contractsAssembly = typeof(IBootstrapper).Assembly;
+            var expectedContractsTypes = contractsAssembly
+                .GetTypes()
+                .Where(type => type.IsInterface && !s_excludedContractsTypes.Contains(type))
+                .ToList();
+            expectedContractsTypes.AddRange(s_expectedRegistrationTypes);
+
+            return expectedContractsTypes;
+        }
+    }
+}
