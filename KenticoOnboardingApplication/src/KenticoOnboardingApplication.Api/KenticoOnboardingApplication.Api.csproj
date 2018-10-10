@@ -115,9 +115,7 @@
     <Compile Include="Resolvers\UnityResolver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="ConnectionStrings.config" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
