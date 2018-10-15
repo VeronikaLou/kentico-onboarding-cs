@@ -6,9 +6,9 @@ namespace KenticoOnboardingApplication.Contracts.Models
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public DateTime LastUpdate { get; set; } = DateTime.Now;
-        public DateTime Creation { get; set; } = DateTime.Now;
+        public DateTime LastUpdateTime { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        public override string ToString() => $"Item {Id} = {Text}";
+        public override string ToString() => $"Item {Id} = {Text}, was created at {CreationTime} and updated at {LastUpdateTime}.";
     }
 }
