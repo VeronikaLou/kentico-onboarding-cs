@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.Repositories", "src\KenticoOnboardingApplication.Repositories\KenticoOnboardingApplication.Repositories.csproj", "{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KenticoOnboardingApplication.Services", "src\KenticoOnboardingApplication.Services\KenticoOnboardingApplication.Services.csproj", "{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{0A3A061A-5ED8-43EA-A30A-B4BADE228FB2} = {EDD38C2F-BB87-4E03-BC33-1EDC9435684C}
 		{8940F20B-E14D-488C-85BA-BA4F0CF5A575} = {E23D6A5C-2211-471F-AFEB-726F4D9F130C}
 		{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0} = {E23D6A5C-2211-471F-AFEB-726F4D9F130C}
+		{3921EA51-3FEC-4AB3-B927-476FA7C0B07C} = {E23D6A5C-2211-471F-AFEB-726F4D9F130C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BC6C853-3C4B-451E-BE85-0819884FDEED}
