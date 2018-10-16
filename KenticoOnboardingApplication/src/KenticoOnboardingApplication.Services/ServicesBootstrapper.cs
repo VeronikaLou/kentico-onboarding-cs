@@ -15,7 +15,6 @@ namespace KenticoOnboardingApplication.Services
                 .RegisterType<IItemCreatorService, ItemCreatorService>(new HierarchicalLifetimeManager())
                 .RegisterType<IItemUpdaterService, ItemUpdaterService>(new HierarchicalLifetimeManager())
                 .RegisterType<IItemGetterService, ItemGetterService>(new HierarchicalLifetimeManager())
-                .RegisterType<IItemRemoverService, ItemRemoverService>(new HierarchicalLifetimeManager())
                 .RegisterType<IGuidGenerator, GuidGenerator>(new HierarchicalLifetimeManager())
                 .RegisterType<ITimeManager, TimeManager>(new HierarchicalLifetimeManager());
     }

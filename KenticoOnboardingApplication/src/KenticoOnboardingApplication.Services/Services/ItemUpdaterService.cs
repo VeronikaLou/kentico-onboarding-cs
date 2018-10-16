@@ -6,7 +6,7 @@ using KenticoOnboardingApplication.Contracts.Services;
 
 namespace KenticoOnboardingApplication.Services.Services
 {
-    internal class ItemUpdaterService: IItemUpdaterService
+    internal class ItemUpdaterService : IItemUpdaterService
     {
         private readonly IListRepository _repository;
         private readonly ITimeManager _timeManager;
@@ -22,7 +22,7 @@ namespace KenticoOnboardingApplication.Services.Services
             var databaseItem = await _repository.GetItemAsync(item.Id);
             if (databaseItem == null)
                 return new ItemWrapper(null);
-           
+
             item.CreationTime = databaseItem.CreationTime;
             item.LastUpdateTime = _timeManager.GetDateTimeNow();
             var result = await _repository.UpdateItemAsync(item);

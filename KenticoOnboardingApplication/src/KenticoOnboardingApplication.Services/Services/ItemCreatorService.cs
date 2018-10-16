@@ -6,7 +6,7 @@ using KenticoOnboardingApplication.Contracts.Services;
 
 namespace KenticoOnboardingApplication.Services.Services
 {
-    internal class ItemCreatorService: IItemCreatorService
+    internal class ItemCreatorService : IItemCreatorService
     {
         private readonly IListRepository _repository;
         private readonly IGuidGenerator _guidGenerator;
@@ -18,7 +18,6 @@ namespace KenticoOnboardingApplication.Services.Services
             _guidGenerator = guidGenerator;
             _timeManager = timeManager;
         }
-
 
         public async Task<Item> CreateItemAsync(Item item)
         {
