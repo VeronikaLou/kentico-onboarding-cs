@@ -25,7 +25,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
                     return false;
                 }
 
-                return first.Id == second.Id && first.Text == second.Text;
+                return first.Id == second.Id && first.Text == second.Text && first.CreationTime == second.CreationTime && first.LastUpdateTime == second.LastUpdateTime;
             }
 
             public int GetHashCode(Item item) => item.Id.GetHashCode() + item.Text.GetHashCode();
