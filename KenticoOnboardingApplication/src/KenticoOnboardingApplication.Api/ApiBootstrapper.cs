@@ -3,6 +3,7 @@ using System.Web;
 using KenticoOnboardingApplication.Api.Helpers;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Helpers;
+using KenticoOnboardingApplication.Contracts.Models;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
@@ -17,7 +18,8 @@ namespace KenticoOnboardingApplication.Api
                 .RegisterType<HttpRequestMessage>(
                     new HierarchicalLifetimeManager(),
                     InjectHttpMessage()
-                );
+                )
+                .RegisterType<ConnectionString>(new HierarchicalLifetimeManager());
 
         private static InjectionFactory InjectHttpMessage() =>
             new InjectionFactory(
