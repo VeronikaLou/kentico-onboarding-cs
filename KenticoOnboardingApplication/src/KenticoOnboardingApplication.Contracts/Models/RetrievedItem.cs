@@ -1,10 +1,10 @@
 ﻿namespace KenticoOnboardingApplication.Contracts.Models
 {
-    public class ItemWrapper
+    public class RetrievedItem
     {
         public Item Item { get; set; }
         public bool WasFound => Item != null;
 
-        public ItemWrapper(Item item) => Item = item;
+        public RetrievedItem(Item item) => Item = item;
     }
 }

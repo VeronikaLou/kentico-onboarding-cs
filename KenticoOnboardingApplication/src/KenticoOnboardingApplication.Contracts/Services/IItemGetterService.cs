@@ -6,6 +6,6 @@ namespace KenticoOnboardingApplication.Contracts.Services
 {
     public interface IItemGetterService
     {
-        Task<ItemWrapper> GetItemAsync(Guid id);
+        Task<RetrievedItem> GetItemAsync(Guid id);
     }
 }

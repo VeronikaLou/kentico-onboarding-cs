@@ -5,6 +5,6 @@ namespace KenticoOnboardingApplication.Contracts.Services
 {
     public interface IItemUpdaterService
     {
-        Task<ItemWrapper> UpdateItemAsync(Item item);
+        Task<RetrievedItem> UpdateItemAsync(Item item);
     }
 }
