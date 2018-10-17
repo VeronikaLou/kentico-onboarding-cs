@@ -21,11 +21,16 @@ namespace KenticoOnboardingApplication.Services.Services
 
         public async Task<Item> CreateItemAsync(Item item)
         {
-            item.Id = _guidGenerator.GenerateId();
-            item.CreationTime = _timeManager.GetDateTimeNow();
-            item.LastUpdateTime = _timeManager.GetDateTimeNow();
+            var dateTimeNow = _timeManager.GetDateTimeNow();
+            var newItem = new Item
+            {
+                Text = item.Text,
+                Id = _guidGenerator.GenerateId(),
+                CreationTime = dateTimeNow,
+                LastUpdateTime = dateTimeNow
+            };
 
-            return await _repository.AddItemAsync(item);
+            return await _repository.AddItemAsync(newItem);
         }
     }
 }

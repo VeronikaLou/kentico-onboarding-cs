@@ -10,24 +10,31 @@ namespace KenticoOnboardingApplication.Services.Services
     {
         private readonly IListRepository _repository;
         private readonly ITimeManager _timeManager;
+        private readonly IItemGetterService _itemGetterService;
 
-        public ItemUpdaterService(IListRepository repository, ITimeManager timeManager)
+        public ItemUpdaterService(IListRepository repository, ITimeManager timeManager, IItemGetterService itemGetterService)
         {
             _repository = repository;
             _timeManager = timeManager;
+            _itemGetterService = itemGetterService;
         }
 
-        public async Task<ItemWrapper> UpdateItemAsync(Item item)
+        public async Task<RetrievedItem> UpdateItemAsync(Item item)
         {
-            var databaseItem = await _repository.GetItemAsync(item.Id);
-            if (databaseItem == null)
-                return new ItemWrapper(null);
+            var databaseItem = await _itemGetterService.GetItemAsync(item.Id);
+            if (!databaseItem.WasFound)
+                return databaseItem;
 
-            item.CreationTime = databaseItem.CreationTime;
-            item.LastUpdateTime = _timeManager.GetDateTimeNow();
-            var result = await _repository.UpdateItemAsync(item);
+            var updatedItem = new Item
+            {
+                Id = item.Id,
+                Text = item.Text,
+                CreationTime = databaseItem.Item.CreationTime,
+                LastUpdateTime = _timeManager.GetDateTimeNow()
+            };
+            var result = await _repository.UpdateItemAsync(updatedItem);
 
-            return new ItemWrapper(result);
+            return new RetrievedItem(result);
         }
     }
 }

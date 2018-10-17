@@ -12,11 +12,11 @@ namespace KenticoOnboardingApplication.Services.Services
 
         public ItemGetterService(IListRepository respository) => _repository = respository;
 
-        public async Task<ItemWrapper> GetItemAsync(Guid id)
+        public async Task<RetrievedItem> GetItemAsync(Guid id)
         {
             var databaseItem = await _repository.GetItemAsync(id);
 
-            return new ItemWrapper(databaseItem);
+            return new RetrievedItem(databaseItem);
         }
     }
 }
