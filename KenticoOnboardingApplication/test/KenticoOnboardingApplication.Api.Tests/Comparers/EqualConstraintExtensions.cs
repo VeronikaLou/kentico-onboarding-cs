@@ -25,7 +25,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
                     return false;
                 }
 
-                return first.Id == second.Id && first.Text == second.Text && first.CreationTime == second.CreationTime && first.LastUpdateTime == second.LastUpdateTime;
+                return AreItemsEqual(first, second);
             }
 
             public int GetHashCode(Item item) => item.Id.GetHashCode() + item.Text.GetHashCode();
@@ -33,5 +33,11 @@ namespace KenticoOnboardingApplication.Api.Tests.Comparers
 
         public static EqualConstraint UsingItemComparer(this EqualConstraint constraint) =>
             constraint.Using(LazyComparer.Value);
+
+        public static bool AreItemsEqual(Item first, Item second) =>
+            first.Id == second.Id &&
+            first.Text == second.Text &&
+            first.CreationTime == second.CreationTime &&
+            first.LastUpdateTime == second.LastUpdateTime;
     }
 }
