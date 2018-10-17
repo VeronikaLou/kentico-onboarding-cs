@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -38,17 +39,22 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route("{id:guid}", Name = UrlLocator.RouteGet)]
         public async Task<IHttpActionResult> GetItemAsync(Guid id)
         {
-            if (!ShouldBeIdEmpty(id, false))
-                return BadRequest("Invalid input format.");
+            ShouldBeIdEmpty(id, false);
+            if (!ModelState.IsValid)
+                return BadRequest(GetErrorMessage());
             var result = await _itemGetterService.GetItemAsync(id);
+            if (!result.WasFound)
+                return NotFound();
 
-            return result.WasFound ? (IHttpActionResult) Ok(result.Item) : NotFound();
+            return Ok(result.Item);
         }
 
         public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
-            if (!AreTextAndDatesCorrect(value) || !ShouldBeIdEmpty(value.Id, true))
-                return BadRequest("Invalid input format.");
+            ValidateTextAndDateTimes(value);
+            ShouldBeIdEmpty(value.Id, true);
+            if (!ModelState.IsValid)
+                return BadRequest(GetErrorMessage());
             var uri = _urlLocator.GetListItemUri(value.Id);
             var item = await _itemCreatorService.CreateItemAsync(value);
 
@@ -58,45 +64,65 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value)
         {
-            if (!AreTextAndDatesCorrect(value) || !ShouldBeIdEmpty(value.Id, false))
-                return BadRequest("Invalid input format.");
+            ValidateTextAndDateTimes(value);
+            ShouldBeIdEmpty(value.Id, false);
+            if (!ModelState.IsValid)
+                return BadRequest(GetErrorMessage());
             var result = await _itemUpdaterService.UpdateItemAsync(value);
+            if (!result.WasFound)
+                return NotFound();
 
-            return result.WasFound ? (IHttpActionResult) Ok(result.Item) : NotFound();
+            return Ok(result.Item);
         }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
         {
-            if (!ShouldBeIdEmpty(id, false))
-                return BadRequest("Invalid input format.");
-            var databaseItem = await _itemGetterService.GetItemAsync(id);
-            if (!databaseItem.WasFound)
+            ShouldBeIdEmpty(id, false);
+            if (!ModelState.IsValid)
+                return BadRequest(GetErrorMessage());
+            var retrievedItem = await _itemGetterService.GetItemAsync(id);
+            if (!retrievedItem.WasFound)
                 return NotFound();
-
             await _repository.DeleteItemAsync(id);
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        private bool AreTextAndDatesCorrect(Item item)
+        private string GetErrorMessage() =>
+            string.Join(" & ", ModelState.Values
+                .SelectMany(value => value.Errors)
+                .Select(error => error.ErrorMessage));
+
+        private void ValidateTextAndDateTimes(Item item)
         {
-            var text = !string.IsNullOrEmpty(item.Text);
-            if (!text)
-                ModelState.AddModelError("ItemError", "Text cannot be empty.");
-            var lastUpdate = item.LastUpdateTime == DateTime.MinValue;
-            if (!lastUpdate)
-                ModelState.AddModelError("ItemError", "LastUpdateTime cannot be set.");
-            var creation = item.CreationTime == DateTime.MinValue;
-            if (!creation)
-                ModelState.AddModelError("ItemError", "CreationTime cannot be set.");
-            return creation && lastUpdate && text;
+            ValidateText(item.Text);
+            ValidateLastUpdateTime(item.LastUpdateTime);
+            ValidateCreationTime(item.CreationTime);
         }
 
-        private bool ShouldBeIdEmpty(Guid id, bool shouldBeEmpty)
+        private void ValidateText(string text)
         {
-            if (id == Guid.Empty == shouldBeEmpty) return true;
-            ModelState.AddModelError("ItemError", shouldBeEmpty ? "Id must be empty." : "Id cannot be empty.");
-            return false;
+            if (string.IsNullOrEmpty(text))
+                ModelState.AddModelError("ItemError", "Text cannot be empty.");
+        }
+
+        private void ValidateCreationTime(DateTime time)
+        {
+            if (time != DateTime.MinValue)
+                ModelState.AddModelError("ItemError", "CreationTime cannot be set.");
+        }
+
+        private void ValidateLastUpdateTime(DateTime time)
+        {
+            if (time != DateTime.MinValue)
+                ModelState.AddModelError("ItemError", "LastUpdateTime cannot be set.");
+        }
+
+        private void ShouldBeIdEmpty(Guid id, bool shouldBeEmpty)
+        {
+            if (id == Guid.Empty != shouldBeEmpty)
+                ModelState.AddModelError("ItemError", shouldBeEmpty ? "Id must be empty." : "Id cannot be empty.");
         }
     }
 }
