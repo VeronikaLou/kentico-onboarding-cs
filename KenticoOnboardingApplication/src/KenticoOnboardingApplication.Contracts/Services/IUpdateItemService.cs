@@ -3,8 +3,8 @@ using KenticoOnboardingApplication.Contracts.Models;
 
 namespace KenticoOnboardingApplication.Contracts.Services
 {
-    public interface IItemCreatorService
+    public interface IUpdateItemService
     {
-        Task<Item> CreateItemAsync(Item item);
+        Task<RetrievedItem> UpdateItemAsync(Item item);
     }
 }

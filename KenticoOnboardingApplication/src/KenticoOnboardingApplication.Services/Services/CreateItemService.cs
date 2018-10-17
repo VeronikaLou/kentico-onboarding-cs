@@ -6,13 +6,13 @@ using KenticoOnboardingApplication.Contracts.Services;
 
 namespace KenticoOnboardingApplication.Services.Services
 {
-    internal class ItemCreatorService : IItemCreatorService
+    internal class CreateItemService : ICreateItemService
     {
         private readonly IListRepository _repository;
         private readonly IGuidGenerator _guidGenerator;
         private readonly ITimeManager _timeManager;
 
-        public ItemCreatorService(IListRepository repository, IGuidGenerator guidGenerator, ITimeManager timeManager)
+        public CreateItemService(IListRepository repository, IGuidGenerator guidGenerator, ITimeManager timeManager)
         {
             _repository = repository;
             _guidGenerator = guidGenerator;

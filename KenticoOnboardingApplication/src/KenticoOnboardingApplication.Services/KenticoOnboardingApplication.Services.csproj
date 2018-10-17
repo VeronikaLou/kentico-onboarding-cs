@@ -74,9 +74,9 @@
     <Compile Include="Helpers\TimeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServicesBootstrapper.cs" />
-    <Compile Include="Services\ItemGetterService.cs" />
-    <Compile Include="Services\ItemUpdaterService.cs" />
-    <Compile Include="Services\ItemCreatorService.cs" />
+    <Compile Include="Services\GetItemService.cs" />
+    <Compile Include="Services\UpdateItemService.cs" />
+    <Compile Include="Services\CreateItemService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KenticoOnboardingApplication.Contracts\KenticoOnboardingApplication.Contracts.csproj">

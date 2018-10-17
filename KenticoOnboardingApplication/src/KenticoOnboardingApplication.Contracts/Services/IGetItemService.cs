@@ -4,7 +4,7 @@ using KenticoOnboardingApplication.Contracts.Models;
 
 namespace KenticoOnboardingApplication.Contracts.Services
 {
-    public interface IItemGetterService
+    public interface IGetItemService
     {
         Task<RetrievedItem> GetItemAsync(Guid id);
     }

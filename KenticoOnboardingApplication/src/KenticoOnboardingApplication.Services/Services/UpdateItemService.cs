@@ -6,13 +6,13 @@ using KenticoOnboardingApplication.Contracts.Services;
 
 namespace KenticoOnboardingApplication.Services.Services
 {
-    internal class ItemUpdaterService : IItemUpdaterService
+    internal class UpdateItemService : IUpdateItemService
     {
         private readonly IListRepository _repository;
         private readonly ITimeManager _timeManager;
-        private readonly IItemGetterService _itemGetterService;
+        private readonly IGetItemService _itemGetterService;
 
-        public ItemUpdaterService(IListRepository repository, ITimeManager timeManager, IItemGetterService itemGetterService)
+        public UpdateItemService(IListRepository repository, ITimeManager timeManager, IGetItemService itemGetterService)
         {
             _repository = repository;
             _timeManager = timeManager;

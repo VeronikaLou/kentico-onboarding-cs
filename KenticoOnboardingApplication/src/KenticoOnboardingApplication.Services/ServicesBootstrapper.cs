@@ -12,9 +12,9 @@ namespace KenticoOnboardingApplication.Services
     {
         public IUnityContainer Register(IUnityContainer container) =>
             container
-                .RegisterType<IItemCreatorService, ItemCreatorService>(new HierarchicalLifetimeManager())
-                .RegisterType<IItemUpdaterService, ItemUpdaterService>(new HierarchicalLifetimeManager())
-                .RegisterType<IItemGetterService, ItemGetterService>(new HierarchicalLifetimeManager())
+                .RegisterType<ICreateItemService, CreateItemService>(new HierarchicalLifetimeManager())
+                .RegisterType<IUpdateItemService, UpdateItemService>(new HierarchicalLifetimeManager())
+                .RegisterType<IGetItemService, GetItemService>(new HierarchicalLifetimeManager())
                 .RegisterType<IGuidGenerator, GuidGenerator>(new HierarchicalLifetimeManager())
                 .RegisterType<ITimeManager, TimeManager>(new HierarchicalLifetimeManager());
     }

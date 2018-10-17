@@ -11,7 +11,7 @@ namespace KenticoOnboardingApplication.Repositories.Repositories
     {
         private static IMongoCollection<Item> _collection;
 
-        public ListRepository(ConnectionString connectionString)
+        public ListRepository(IConnectionString connectionString)
         {
             var urlConnectionString = MongoUrl.Create(connectionString.TodoList);
             var client = new MongoClient(urlConnectionString);

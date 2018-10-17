@@ -19,12 +19,12 @@ namespace KenticoOnboardingApplication.Api.Controllers
     {
         private readonly IListRepository _repository;
         private readonly IUrlLocator _urlLocator;
-        private readonly IItemUpdaterService _itemUpdaterService;
-        private readonly IItemCreatorService _itemCreatorService;
-        private readonly IItemGetterService _itemGetterService;
+        private readonly IUpdateItemService _itemUpdaterService;
+        private readonly ICreateItemService _itemCreatorService;
+        private readonly IGetItemService _itemGetterService;
 
-        public ListController(IListRepository repository, IUrlLocator locator, IItemCreatorService itemCreatorService,
-            IItemUpdaterService itemUpdaterService, IItemGetterService itemGetterService)
+        public ListController(IListRepository repository, IUrlLocator locator, ICreateItemService itemCreatorService,
+            IUpdateItemService itemUpdaterService, IGetItemService itemGetterService)
         {
             _repository = repository;
             _urlLocator = locator;

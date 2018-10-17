@@ -6,11 +6,11 @@ using KenticoOnboardingApplication.Contracts.Services;
 
 namespace KenticoOnboardingApplication.Services.Services
 {
-    internal class ItemGetterService : IItemGetterService
+    internal class GetItemService : IGetItemService
     {
         private readonly IListRepository _repository;
 
-        public ItemGetterService(IListRepository respository) => _repository = respository;
+        public GetItemService(IListRepository respository) => _repository = respository;
 
         public async Task<RetrievedItem> GetItemAsync(Guid id)
         {
