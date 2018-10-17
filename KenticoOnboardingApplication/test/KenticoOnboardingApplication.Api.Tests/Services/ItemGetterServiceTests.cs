@@ -13,25 +13,26 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
     public class ItemGetterServiceTests
     {
         private IListRepository _repository;
-        private ItemGetterService _itemGetterService;
+        private GetItemService _itemGetterService;
 
         [SetUp]
         public void SetUp()
         {
             _repository = Substitute.For<IListRepository>();
-            _itemGetterService = new ItemGetterService(_repository);
+            _itemGetterService = new GetItemService(_repository);
         }
 
         [Test]
         public async Task GetItemAsync_WithIdFromDb_ReturnsItemAndTrue()
         {
             var id = new Guid("00000000-0000-0000-0000-000000000006");
+            var dateTime = new DateTime(2000, 12, 20, 21, 59, 59);
             var expectedItem = new Item
             {
                 Id = id,
                 Text = "text",
-                CreationTime = DateTime.MaxValue,
-                LastUpdateTime = DateTime.MaxValue
+                CreationTime = dateTime,
+                LastUpdateTime = dateTime
             };
             _repository.GetItemAsync(id).Returns(expectedItem);
 

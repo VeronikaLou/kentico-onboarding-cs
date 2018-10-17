@@ -95,6 +95,9 @@
     <Compile Include="DependencyConfigTests.cs" />
     <Compile Include="ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ItemCreatorServiceTests.cs" />
+    <Compile Include="Services\ItemGetterServiceTests.cs" />
+    <Compile Include="Services\ItemUpdaterServiceTests.cs" />
     <Compile Include="UrlLocatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +114,10 @@
     <ProjectReference Include="..\..\src\KenticoOnboardingApplication.Contracts\KenticoOnboardingApplication.Contracts.csproj">
       <Project>{8940F20B-E14D-488C-85BA-BA4F0CF5A575}</Project>
       <Name>KenticoOnboardingApplication.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\KenticoOnboardingApplication.Services\KenticoOnboardingApplication.Services.csproj">
+      <Project>{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}</Project>
+      <Name>KenticoOnboardingApplication.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
