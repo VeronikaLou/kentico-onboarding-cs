@@ -1,9 +1,10 @@
 ﻿using System.Net.Http;
 using System.Web;
 using KenticoOnboardingApplication.Api.Helpers;
+using KenticoOnboardingApplication.Api.Repositories;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Helpers;
-using KenticoOnboardingApplication.Contracts.Models;
+using KenticoOnboardingApplication.Contracts.Repositories;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
@@ -19,7 +20,7 @@ namespace KenticoOnboardingApplication.Api
                     new HierarchicalLifetimeManager(),
                     InjectHttpMessage()
                 )
-                .RegisterType<ConnectionString>(new HierarchicalLifetimeManager());
+                .RegisterType<IConnectionString, ConnectionString>(new HierarchicalLifetimeManager());
 
         private static InjectionFactory InjectHttpMessage() =>
             new InjectionFactory(
