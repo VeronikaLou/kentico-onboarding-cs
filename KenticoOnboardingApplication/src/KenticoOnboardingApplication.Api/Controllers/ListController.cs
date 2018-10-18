@@ -19,18 +19,18 @@ namespace KenticoOnboardingApplication.Api.Controllers
     {
         private readonly IListRepository _repository;
         private readonly IUrlLocator _urlLocator;
-        private readonly IUpdateItemService _itemUpdaterService;
-        private readonly ICreateItemService _itemCreatorService;
-        private readonly IGetItemService _itemGetterService;
+        private readonly IUpdateItemService _updateItemService;
+        private readonly ICreateItemService _createItemService;
+        private readonly IGetItemService _getItemService;
 
-        public ListController(IListRepository repository, IUrlLocator locator, ICreateItemService itemCreatorService,
-            IUpdateItemService itemUpdaterService, IGetItemService itemGetterService)
+        public ListController(IListRepository repository, IUrlLocator locator, ICreateItemService createItemService,
+            IUpdateItemService updateItemService, IGetItemService getItemService)
         {
             _repository = repository;
             _urlLocator = locator;
-            _itemCreatorService = itemCreatorService;
-            _itemUpdaterService = itemUpdaterService;
-            _itemGetterService = itemGetterService;
+            _createItemService = createItemService;
+            _updateItemService = updateItemService;
+            _getItemService = getItemService;
         }
 
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
@@ -42,7 +42,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
             ShouldBeIdEmpty(id, false);
             if (!ModelState.IsValid)
                 return BadRequest(GetErrorMessage());
-            var result = await _itemGetterService.GetItemAsync(id);
+            var result = await _getItemService.GetItemAsync(id);
             if (!result.WasFound)
                 return NotFound();
 
@@ -56,7 +56,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(GetErrorMessage());
             var uri = _urlLocator.GetListItemUri(value.Id);
-            var item = await _itemCreatorService.CreateItemAsync(value);
+            var item = await _createItemService.CreateItemAsync(value);
 
             return Created(uri, item);
         }
@@ -68,7 +68,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
             ShouldBeIdEmpty(value.Id, false);
             if (!ModelState.IsValid)
                 return BadRequest(GetErrorMessage());
-            var result = await _itemUpdaterService.UpdateItemAsync(value);
+            var result = await _updateItemService.UpdateItemAsync(value);
             if (!result.WasFound)
                 return NotFound();
 
@@ -81,7 +81,7 @@ namespace KenticoOnboardingApplication.Api.Controllers
             ShouldBeIdEmpty(id, false);
             if (!ModelState.IsValid)
                 return BadRequest(GetErrorMessage());
-            var retrievedItem = await _itemGetterService.GetItemAsync(id);
+            var retrievedItem = await _getItemService.GetItemAsync(id);
             if (!retrievedItem.WasFound)
                 return NotFound();
             await _repository.DeleteItemAsync(id);

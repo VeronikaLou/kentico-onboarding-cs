@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using KenticoOnboardingApplication.Api.Controllers;
 using NUnit.Framework;
 using System.Web.Http;
-using KenticoOnboardingApplication.Api.Tests.Comparers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
 using KenticoOnboardingApplication.Contracts.Services;
+using KenticoOnboardingApplication.Tests.Base.Comparers;
 using NSubstitute;
 
 namespace KenticoOnboardingApplication.Api.Tests
@@ -22,9 +22,9 @@ namespace KenticoOnboardingApplication.Api.Tests
         private ListController _controller;
         private IListRepository _repository;
         private IUrlLocator _urlLocator;
-        private ICreateItemService _itemCreatorService;
-        private IUpdateItemService _itemUpdaterService;
-        private IGetItemService _itemGetterService;
+        private ICreateItemService _createItemService;
+        private IUpdateItemService _updateItemService;
+        private IGetItemService _getItemService;
 
         private static readonly Item[] s_items =
         {
@@ -72,12 +72,12 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             _repository = Substitute.For<IListRepository>();
             _urlLocator = Substitute.For<IUrlLocator>();
-            _itemCreatorService = Substitute.For<ICreateItemService>();
-            _itemUpdaterService = Substitute.For<IUpdateItemService>();
-            _itemGetterService = Substitute.For<IGetItemService>();
+            _createItemService = Substitute.For<ICreateItemService>();
+            _updateItemService = Substitute.For<IUpdateItemService>();
+            _getItemService = Substitute.For<IGetItemService>();
 
-            _controller = new ListController(_repository, _urlLocator, _itemCreatorService, _itemUpdaterService,
-                _itemGetterService)
+            _controller = new ListController(_repository, _urlLocator, _createItemService, _updateItemService,
+                _getItemService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -100,9 +100,9 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task GetItem_WithExistingId_ReturnsItemAndOk()
         {
-            _itemGetterService
+            _getItemService
                 .GetItemAsync(s_items[0].Id)
-                .Returns(Task.FromResult(new RetrievedItem(s_items[0])));
+                .Returns(new RetrievedItem(s_items[0]));
             var expectedValue = s_items[0];
 
             var (executedResult, item) =
@@ -126,7 +126,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task GetItem_WithNonexistingId_ReturnsNotFound()
         {
-            _itemGetterService
+            _getItemService
                 .GetItemAsync(s_items[1].Id)
                 .Returns(new RetrievedItem(null));
 
@@ -144,7 +144,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             var expectedValue = s_items[1];
             var postItem = s_items[1];
             postItem.Id = Guid.Empty;
-            _itemCreatorService
+            _createItemService
                 .CreateItemAsync(postItem)
                 .Returns(s_items[1]);
             _urlLocator.GetListItemUri(s_items[1].Id).Returns(new Uri(expectedLocation));
@@ -171,9 +171,9 @@ namespace KenticoOnboardingApplication.Api.Tests
         }
 
         [Test]
-        public async Task PutItem_WithItemAndId_ReturnsItemAndOk()
+        public async Task PutItem_WithItemFromDb_ReturnsItemAndOk()
         {
-            _itemUpdaterService
+            _updateItemService
                 .UpdateItemAsync(s_items[0])
                 .Returns(new RetrievedItem(s_items[0]));
             var expectedValue = s_items[0];
@@ -189,7 +189,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task PutItem_WithItemWhichIsNotInDb_ReturnsNotFound()
         {
-            _itemUpdaterService
+            _updateItemService
                 .UpdateItemAsync(s_items[2])
                 .Returns(new RetrievedItem(null));
 
@@ -217,7 +217,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithExistingId_ReturnsNoContent()
         {
-            _itemGetterService.GetItemAsync(s_items[0].Id).Returns(new RetrievedItem(s_items[0]));
+            _getItemService.GetItemAsync(s_items[0].Id).Returns(new RetrievedItem(s_items[0]));
             var executedResult =
                 await GetExectuedResult(controller => controller.DeleteItemAsync(s_items[0].Id));
             var resultStatus = executedResult.StatusCode;
@@ -229,7 +229,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithNonexistingId_ReturnsNotFound()
         {
-            _itemGetterService.GetItemAsync(s_items[1].Id).Returns(new RetrievedItem(null));
+            _getItemService.GetItemAsync(s_items[1].Id).Returns(new RetrievedItem(null));
             var executedResult =
                 await GetExectuedResult(controller => controller.DeleteItemAsync(s_items[1].Id));
             var resultStatus = executedResult.StatusCode;
