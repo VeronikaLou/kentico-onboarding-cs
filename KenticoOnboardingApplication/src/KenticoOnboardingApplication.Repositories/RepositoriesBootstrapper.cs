@@ -10,15 +10,6 @@ namespace KenticoOnboardingApplication.Repositories
     public class RepositoriesBootstrapper : IBootstrapper
     {
         public IUnityContainer Register(IUnityContainer container) =>
-            container.RegisterType<IListRepository, Repositories.ListRepository>(
-                new HierarchicalLifetimeManager(),
-                InjectConnectionString()
-            );
-
-        private static InjectionConstructor InjectConnectionString()
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["TODOList"].ConnectionString;
-            return new InjectionConstructor(connectionString);
-        }
+            container.RegisterType<IListRepository, Repositories.ListRepository>(new HierarchicalLifetimeManager());
     }
 }
