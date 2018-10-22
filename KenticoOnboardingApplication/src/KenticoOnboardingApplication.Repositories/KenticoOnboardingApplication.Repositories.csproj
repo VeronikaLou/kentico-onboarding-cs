@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoriesBootstraper.cs" />
+    <Compile Include="RepositoriesBootstrapper.cs" />
     <Compile Include="Repositories\ListRepository.cs" />
   </ItemGroup>
   <ItemGroup>
