@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KenticoOnboardingApplication.Api.Tests.Comparers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
 using KenticoOnboardingApplication.Contracts.Services;
 using KenticoOnboardingApplication.Services.Services;
+using KenticoOnboardingApplication.Tests.Base.Comparers;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace KenticoOnboardingApplication.Api.Tests.Services
+namespace KenticoOnboardingApplication.Services.Tests
 {
     [TestFixture]
     public class ItemUpdaterServiceTests
     {
         private IListRepository _repository;
-        private UpdateItemService _itemUpdaterService;
-        private IGetItemService _itemGetterService;
+        private UpdateItemService _updateItemService;
+        private IGetItemService _getItemService;
         private ITimeManager _timeManager;
 
         [SetUp]
@@ -24,22 +24,17 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
         {
             _repository = Substitute.For<IListRepository>();
             _timeManager = Substitute.For<ITimeManager>();
-            _itemGetterService = Substitute.For<IGetItemService>();
-            _itemUpdaterService = new UpdateItemService(_repository, _timeManager, _itemGetterService);
+            _getItemService = Substitute.For<IGetItemService>();
+            _updateItemService = new UpdateItemService(_repository, _timeManager, _getItemService);
         }
 
         [Test]
         public async Task UpdateItemAsync_WithItemFromDb_ReturnsItemAndTrue()
         {
-            var lastUpdateTime = new DateTime(2018, 10, 17, 9, 0, 0);
-            var (expectedItem, itemForUpdate) = GetExpectedItemAndItemForUpdate(lastUpdateTime);
-            _timeManager.GetDateTimeNow().Returns(lastUpdateTime);
-            _itemGetterService.GetItemAsync(itemForUpdate.Id).Returns(new RetrievedItem(itemForUpdate));
-            _repository
-                .UpdateItemAsync(Arg.Is<Item>(comparedItem => ComparerWraper.AreItemsEqual(comparedItem, expectedItem)))
-                .Returns(expectedItem);
+            var (expectedItem, itemForUpdate) = GetExpectedItemAndItemForUpdate();
+            Arrange(expectedItem, itemForUpdate);
 
-            var result = await _itemUpdaterService.UpdateItemAsync(itemForUpdate);
+            var result = await _updateItemService.UpdateItemAsync(itemForUpdate);
 
             Assert.That(result.Item, Is.EqualTo(expectedItem).UsingItemComparer());
             Assert.That(result.WasFound, Is.True);
@@ -54,15 +49,26 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
                 Text = "different text",
             };
             _getItemService.GetItemAsync(item.Id).Returns(new RetrievedItem(null));
+            _updateItemService.UpdateItemAsync(item).Returns(new RetrievedItem(null));
 
-            var result = await _itemUpdaterService.UpdateItemAsync(item);
+            var result = await _updateItemService.UpdateItemAsync(item);
 
             Assert.That(result.Item, Is.Null);
             Assert.That(result.WasFound, Is.False);
         }
 
-        private static (Item expectedItem, Item itemForUpdate) GetExpectedItemAndItemForUpdate(DateTime lastUpdateTime)
+        private void Arrange(Item expectedItem, Item itemForUpdate)
         {
+            _timeManager.GetDateTimeNow().Returns(expectedItem.LastUpdateTime);
+            _getItemService.GetItemAsync(itemForUpdate.Id).Returns(new RetrievedItem(itemForUpdate));
+            _repository
+                .UpdateItemAsync(Arg.Is<Item>(comparedItem => ComparerWraper.AreItemsEqual(comparedItem, expectedItem)))
+                .Returns(expectedItem);
+        }
+
+        private static (Item expectedItem, Item itemForUpdate) GetExpectedItemAndItemForUpdate()
+        {
+            var lastUpdateTime = new DateTime(2018, 10, 17, 9, 0, 0);
             var itemForUpdate = new Item
             {
                 Id = new Guid("00000000-0000-0000-0000-000000000006"),
@@ -75,6 +81,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
                 Text = itemForUpdate.Text,
                 LastUpdateTime = lastUpdateTime
             };
+
             return (expectedItem, itemForUpdate);
         }
     }

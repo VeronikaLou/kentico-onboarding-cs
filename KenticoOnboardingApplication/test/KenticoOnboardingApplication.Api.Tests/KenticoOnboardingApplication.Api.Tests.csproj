@@ -91,13 +91,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\EqualConstraintExtensions.cs" />
     <Compile Include="DependencyConfigTests.cs" />
     <Compile Include="ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ItemCreatorServiceTests.cs" />
-    <Compile Include="Services\ItemGetterServiceTests.cs" />
-    <Compile Include="Services\ItemUpdaterServiceTests.cs" />
     <Compile Include="UrlLocatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +114,10 @@
     <ProjectReference Include="..\..\src\KenticoOnboardingApplication.Services\KenticoOnboardingApplication.Services.csproj">
       <Project>{3921EA51-3FEC-4AB3-B927-476FA7C0B07C}</Project>
       <Name>KenticoOnboardingApplication.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KenticoOnboardingApplication.Tests.Base\KenticoOnboardingApplication.Tests.Base.csproj">
+      <Project>{1FD20BAF-4028-4B82-AFCE-9294DC02CAD5}</Project>
+      <Name>KenticoOnboardingApplication.Tests.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

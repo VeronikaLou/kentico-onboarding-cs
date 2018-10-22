@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
-using KenticoOnboardingApplication.Api.Tests.Comparers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
 using KenticoOnboardingApplication.Services.Services;
+using KenticoOnboardingApplication.Tests.Base.Comparers;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace KenticoOnboardingApplication.Api.Tests.Services
+namespace KenticoOnboardingApplication.Services.Tests
 {
     [TestFixture]
     public class ItemCreatorServiceTests
     {
-        private CreateItemService _itemCreatorService;
+        private CreateItemService _createItemService;
         private IListRepository _repository;
         private ITimeManager _timeManager;
         private IGuidGenerator _guidGenerator;
@@ -24,11 +24,30 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
             _repository = Substitute.For<IListRepository>();
             _timeManager = Substitute.For<ITimeManager>();
             _guidGenerator = Substitute.For<IGuidGenerator>();
-            _itemCreatorService = new CreateItemService(_repository, _guidGenerator, _timeManager);
+            _createItemService = new CreateItemService(_repository, _guidGenerator, _timeManager);
         }
 
         [Test]
         public async Task CreateItemAsync_WithValidItem_ReturnsItemWithIdAndCreationAndLastUpdate()
+        {
+            var expectedItem = GetExpectedItem();
+            Arrange(expectedItem);
+            var postItem = new Item {Text = "text"};
+
+            var result = await _createItemService.CreateItemAsync(postItem);
+
+            Assert.That(result, Is.EqualTo(expectedItem).UsingItemComparer());
+        }
+
+        private void Arrange(Item expectedItem)
+        {
+            _timeManager.GetDateTimeNow().Returns(expectedItem.CreationTime);
+            _guidGenerator.GenerateId().Returns(expectedItem.Id);
+            _repository.AddItemAsync(Arg.Is<Item>(item => ComparerWraper.AreItemsEqual(item, expectedItem)))
+                .Returns(expectedItem);
+        }
+
+        private static Item GetExpectedItem()
         {
             var creationTime = new DateTime(1999, 9, 9, 4, 22, 33);
             var guid = new Guid("00000000-0000-0000-0000-000000000006");
@@ -40,15 +59,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Services
                 LastUpdateTime = creationTime
             };
 
-            _timeManager.GetDateTimeNow().Returns(creationTime);
-            _guidGenerator.GenerateId().Returns(guid);
-            _repository.AddItemAsync(Arg.Is<Item>(item => ComparerWraper.AreItemsEqual(item, expectedItem)))
-                .Returns(expectedItem);
-            var postItem = new Item {Text = "text"};
-
-            var result = await _itemCreatorService.CreateItemAsync(postItem);
-
-            Assert.That(result, Is.EqualTo(expectedItem).UsingItemComparer());
+            return expectedItem;
         }
     }
 }
