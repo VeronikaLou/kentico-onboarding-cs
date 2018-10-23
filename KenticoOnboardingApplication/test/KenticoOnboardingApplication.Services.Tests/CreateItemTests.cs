@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace KenticoOnboardingApplication.Services.Tests
 {
     [TestFixture]
-    public class ItemCreatorServiceTests
+    public class CreateItemTests
     {
         private CreateItemService _createItemService;
         private IListRepository _repository;

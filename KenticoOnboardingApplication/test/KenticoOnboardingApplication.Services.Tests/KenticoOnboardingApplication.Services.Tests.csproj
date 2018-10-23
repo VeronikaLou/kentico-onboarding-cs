@@ -66,9 +66,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\IdGeneratorTests.cs" />
-    <Compile Include="ItemCreatorServiceTests.cs" />
-    <Compile Include="ItemGetterServiceTests.cs" />
-    <Compile Include="ItemUpdaterServiceTests.cs" />
+    <Compile Include="CreateItemTests.cs" />
+    <Compile Include="GetItemTests.cs" />
+    <Compile Include="UpdateItemTests.cs" />
     <Compile Include="Helpers\TimeManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace KenticoOnboardingApplication.Services.Tests
 {
     [TestFixture]
-    public class ItemGetterServiceTests
+    public class GetItemTests
     {
         private IListRepository _repository;
         private GetItemService _getItemService;

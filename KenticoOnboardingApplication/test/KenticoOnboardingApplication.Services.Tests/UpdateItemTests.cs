@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace KenticoOnboardingApplication.Services.Tests
 {
     [TestFixture]
-    public class ItemUpdaterServiceTests
+    public class UpdateItemTests
     {
         private IListRepository _repository;
         private UpdateItemService _updateItemService;
@@ -49,7 +49,6 @@ namespace KenticoOnboardingApplication.Services.Tests
                 Text = "different text",
             };
             _getItemService.GetItemAsync(item.Id).Returns(new RetrievedItem(null));
-            _updateItemService.UpdateItemAsync(item).Returns(new RetrievedItem(null));
 
             var result = await _updateItemService.UpdateItemAsync(item);
 
