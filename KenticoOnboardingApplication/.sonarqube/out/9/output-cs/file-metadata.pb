@@ -1,0 +1,9 @@
+ì
+êC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Helpers\GuidGenerator.csë
+éC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Helpers\TimeManager.csï
+íC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Properties\AssemblyInfo.csí
+èC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\ServicesBootstrapper.csï
+íC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Services\GetItemService.csò
+ïC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Services\UpdateItemService.csò
+ïC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Services\Services\CreateItemService.cs\
+XC:\Users\VeronikaL\AppData\Local\Temp\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>KenticoOnboardingApplication.Api.Tests</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Test</ProjectType>
+  <ProjectGuid>0a3a061a-5ed8-43ea-a30a-b4bade228fb2</ProjectGuid>
+  <FullPath>C:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\test\KenticoOnboardingApplication.Api.Tests\KenticoOnboardingApplication.Api.Tests.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResults>
+    <AnalysisResult Id="FilesToAnalyze" Location="C:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\.sonarqube\out\5\FilesToAnalyze.txt" />
+  </AnalysisResults>
+  <AnalysisSettings />
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+</ProjectInfo>

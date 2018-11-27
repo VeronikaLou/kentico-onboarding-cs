@@ -1,0 +1,11 @@
+è
+ÖC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\ApiBootstrapper.csutf-8ö
+êC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\App_Start\DependencyConfig.csutf-8î
+äC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\App_Start\JsonConfig.csutf-8ï
+ãC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\App_Start\RouteConfig.csutf-8ù
+ìC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Repositories\ConnectionString.csutf-8ö
+êC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Controllers\ListController.csutf-8ã
+ÅC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Global.asax.csutf-8í
+àC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Helpers\UrlLocator.csutf-8ó
+çC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Properties\AssemblyInfo.csutf-8ó
+çC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Api\Resolvers\UnityResolver.csutf-8

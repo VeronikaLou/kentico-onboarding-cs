@@ -1,0 +1,13 @@
+ú
+íC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Helpers\IGuidGenerator.csutf-8ö
+êC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Helpers\ITimeManager.csutf-8ô
+èC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Helpers\IUrlLocator.csutf-8ì
+âC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\IBootstrapper.csutf-8ë
+áC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Models\Item.csutf-8ö
+êC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Models\RetrievedItem.csutf-8ù
+ìC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Properties\AssemblyInfo.csutf-8§
+öC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Repositories\IConnectionString.csutf-8¢
+òC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Repositories\IListRepository.csutf-8°
+óC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Services\ICreateItemService.csutf-8û
+îC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Services\IGetItemService.csutf-8°
+óC:\Users\VeronikaL\Desktop\kentico-onboarding-cs\KenticoOnboardingApplication\src\KenticoOnboardingApplication.Contracts\Services\IUpdateItemService.csutf-8
