@@ -3,7 +3,7 @@ using KenticoOnboardingApplication.Contracts.Helpers;
 
 namespace KenticoOnboardingApplication.Services.Helpers
 {
-    internal class GuidGenerator: IGuidGenerator
+    internal class GuidGenerator: IIdGenerator
     {
         public Guid GenerateId() => Guid.NewGuid();
     }

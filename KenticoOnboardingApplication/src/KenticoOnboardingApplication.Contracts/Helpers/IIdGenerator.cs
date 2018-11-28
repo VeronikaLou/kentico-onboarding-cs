@@ -2,7 +2,7 @@
 
 namespace KenticoOnboardingApplication.Contracts.Helpers
 {
-    public interface IGuidGenerator
+    public interface IIdGenerator
     {
         Guid GenerateId();
     }
