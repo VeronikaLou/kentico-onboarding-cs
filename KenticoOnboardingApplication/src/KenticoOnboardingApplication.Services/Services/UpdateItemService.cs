@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
@@ -19,22 +20,33 @@ namespace KenticoOnboardingApplication.Services.Services
             _getItemService = getItemService;
         }
 
-        public async Task<RetrievedItem> UpdateItemAsync(Item item)
+        public async Task<RetrievedItem<Item>> UpdateItemAsync(Item item)
         {
             var retrievedItem = await _getItemService.GetItemAsync(item.Id);
             if (!retrievedItem.WasFound)
-                return retrievedItem;
-
-            var updatedItem = new Item
             {
-                Id = item.Id,
-                Text = item.Text,
-                CreationTime = retrievedItem.Item.CreationTime,
-                LastUpdateTime = _timeManager.GetDateTimeNow()
-            };
+                return retrievedItem;
+            }
+
+            var updatedItem = CreateUpdatedItem(item.Id, item.Text, retrievedItem.Item.CreationTime);
             var result = await _repository.UpdateItemAsync(updatedItem);
 
-            return new RetrievedItem(result);
+            return result == null
+                ? RetrievedItem<Item>.Null
+                : new RetrievedItem<Item>(result);
+        }
+
+        private Item CreateUpdatedItem(Guid id, string text, DateTime creationTime)
+        {
+            var currentTime = _timeManager.GetCurrentTime();
+
+            return new Item
+            {
+                Id = id,
+                Text = text,
+                CreationTime = creationTime,
+                LastUpdateTime = currentTime
+            };
         }
     }
 }

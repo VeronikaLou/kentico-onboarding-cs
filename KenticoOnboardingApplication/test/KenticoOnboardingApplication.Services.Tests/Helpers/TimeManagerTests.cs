@@ -21,7 +21,7 @@ namespace KenticoOnboardingApplication.Services.Tests.Helpers
         [TestCaseSource(nameof(s_minMax))]
         public void GetDateTimeNow_DoesNotReturnMinMax(DateTime time)
         {
-            var result = _timeManager.GetDateTimeNow();
+            var result = _timeManager.GetCurrentTime();
 
             Assert.That(result, !Is.EqualTo(time));
         }
@@ -29,9 +29,9 @@ namespace KenticoOnboardingApplication.Services.Tests.Helpers
         [Test]
         public void GetDateTimeNow_ReturnsDifferentValuesForDifferentCalls()
         {
-            var first = _timeManager.GetDateTimeNow().Ticks;
+            var first = _timeManager.GetCurrentTime().Ticks;
             Thread.Sleep(1);
-            var second = _timeManager.GetDateTimeNow().Ticks;
+            var second = _timeManager.GetCurrentTime().Ticks;
 
             Assert.That(first, Is.EqualTo(second).Within(100000));
         }
@@ -39,9 +39,9 @@ namespace KenticoOnboardingApplication.Services.Tests.Helpers
         [Test]
         public void GetDateTimeNow_LaterCallReturnsLaterTime()
         {
-            var first = _timeManager.GetDateTimeNow();
+            var first = _timeManager.GetCurrentTime();
             Thread.Sleep(1);
-            var second = _timeManager.GetDateTimeNow();
+            var second = _timeManager.GetCurrentTime();
 
             var result = second > first;
 

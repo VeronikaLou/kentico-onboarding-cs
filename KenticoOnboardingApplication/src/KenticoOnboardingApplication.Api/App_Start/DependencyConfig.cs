@@ -22,8 +22,8 @@ namespace KenticoOnboardingApplication.Api
                 .Register<RepositoriesBootstrapper>()
                 .Register<ServicesBootstrapper>();
 
-        private static IUnityContainer Register<T>(this IUnityContainer container)
-            where T : IBootstrapper, new() =>
-            new T().Register(container);
+        private static IUnityContainer Register<TBootstrapper>(this IUnityContainer container)
+            where TBootstrapper : IBootstrapper, new() =>
+            new TBootstrapper().Register(container);
     }
 }

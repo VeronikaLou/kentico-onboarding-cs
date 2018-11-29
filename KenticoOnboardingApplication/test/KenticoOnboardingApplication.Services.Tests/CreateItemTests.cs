@@ -16,14 +16,14 @@ namespace KenticoOnboardingApplication.Services.Tests
         private CreateItemService _createItemService;
         private IListRepository _repository;
         private ITimeManager _timeManager;
-        private IGuidGenerator _guidGenerator;
+        private IIdGenerator<Guid> _guidGenerator;
 
         [SetUp]
         public void SetUp()
         {
             _repository = Substitute.For<IListRepository>();
             _timeManager = Substitute.For<ITimeManager>();
-            _guidGenerator = Substitute.For<IGuidGenerator>();
+            _guidGenerator = Substitute.For<IIdGenerator<Guid>>();
             _createItemService = new CreateItemService(_repository, _guidGenerator, _timeManager);
         }
 
@@ -31,7 +31,7 @@ namespace KenticoOnboardingApplication.Services.Tests
         public async Task CreateItemAsync_WithValidItem_ReturnsItemWithIdAndCreationAndLastUpdate()
         {
             var expectedItem = GetExpectedItem();
-            Arrange(expectedItem);
+            ArrangeTestAccoringToItem(expectedItem);
             var postItem = new Item {Text = "text"};
 
             var result = await _createItemService.CreateItemAsync(postItem);
@@ -39,9 +39,9 @@ namespace KenticoOnboardingApplication.Services.Tests
             Assert.That(result, Is.EqualTo(expectedItem).UsingItemComparer());
         }
 
-        private void Arrange(Item expectedItem)
+        private void ArrangeTestAccoringToItem(Item expectedItem)
         {
-            _timeManager.GetDateTimeNow().Returns(expectedItem.CreationTime);
+            _timeManager.GetCurrentTime().Returns(expectedItem.CreationTime);
             _guidGenerator.GenerateId().Returns(expectedItem.Id);
             _repository.AddItemAsync(Arg.Is<Item>(item => ComparerWraper.AreItemsEqual(item, expectedItem)))
                 .Returns(expectedItem);

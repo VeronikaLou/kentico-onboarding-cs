@@ -10,13 +10,15 @@ namespace KenticoOnboardingApplication.Services.Services
     {
         private readonly IListRepository _repository;
 
-        public GetItemService(IListRepository respository) => _repository = respository;
+        public GetItemService(IListRepository repository) => _repository = repository;
 
-        public async Task<RetrievedItem> GetItemAsync(Guid id)
+        public async Task<RetrievedItem<Item>> GetItemAsync(Guid id)
         {
             var databaseItem = await _repository.GetItemAsync(id);
 
-            return new RetrievedItem(databaseItem);
+            return databaseItem == null
+                ? RetrievedItem<Item>.Null
+                : new RetrievedItem<Item>(databaseItem);
         }
     }
 }

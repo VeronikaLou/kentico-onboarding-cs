@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -39,12 +38,17 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route("{id:guid}", Name = UrlLocator.RouteGet)]
         public async Task<IHttpActionResult> GetItemAsync(Guid id)
         {
-            ShouldBeIdEmpty(id, false);
+            ValidateId(id, shouldBeEmpty: false);
             if (!ModelState.IsValid)
-                return BadRequest(GetErrorMessage());
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _getItemService.GetItemAsync(id);
             if (!result.WasFound)
+            {
                 return NotFound();
+            }
 
             return Ok(result.Item);
         }
@@ -52,9 +56,12 @@ namespace KenticoOnboardingApplication.Api.Controllers
         public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
             ValidateTextAndDateTimes(value);
-            ShouldBeIdEmpty(value.Id, true);
+            ValidateId(value.Id, shouldBeEmpty: true);
             if (!ModelState.IsValid)
-                return BadRequest(GetErrorMessage());
+            {
+                return BadRequest(ModelState);
+            }
+
             var uri = _urlLocator.GetListItemUri(value.Id);
             var item = await _createItemService.CreateItemAsync(value);
 
@@ -65,12 +72,18 @@ namespace KenticoOnboardingApplication.Api.Controllers
         public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value)
         {
             ValidateTextAndDateTimes(value);
-            ShouldBeIdEmpty(value.Id, false);
+            ValidateId(value.Id, shouldBeEmpty: false);
             if (!ModelState.IsValid)
-                return BadRequest(GetErrorMessage());
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _updateItemService.UpdateItemAsync(value);
             if (!result.WasFound)
-                return NotFound();
+            {
+                value.Id = Guid.Empty;
+                return await PostItemAsync(value);
+            }
 
             return Ok(result.Item);
         }
@@ -78,21 +91,22 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
         {
-            ShouldBeIdEmpty(id, false);
+            ValidateId(id, shouldBeEmpty: false);
             if (!ModelState.IsValid)
-                return BadRequest(GetErrorMessage());
+            {
+                return BadRequest(ModelState);
+            }
+
             var retrievedItem = await _getItemService.GetItemAsync(id);
             if (!retrievedItem.WasFound)
+            {
                 return NotFound();
+            }
+
             await _repository.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        private string GetErrorMessage() =>
-            string.Join(" & ", ModelState.Values
-                .SelectMany(value => value.Errors)
-                .Select(error => error.ErrorMessage));
 
         private void ValidateTextAndDateTimes(Item item)
         {
@@ -104,25 +118,53 @@ namespace KenticoOnboardingApplication.Api.Controllers
         private void ValidateText(string text)
         {
             if (string.IsNullOrEmpty(text))
-                ModelState.AddModelError("ItemError", "Text cannot be empty.");
+            {
+                ModelState.AddModelError(nameof(Item.Text), "Text cannot be empty.");
+            }
         }
 
         private void ValidateCreationTime(DateTime time)
         {
             if (time != DateTime.MinValue)
-                ModelState.AddModelError("ItemError", "CreationTime cannot be set.");
+            {
+                ModelState.AddModelError(nameof(Item.CreationTime), "CreationTime cannot be set.");
+            }
         }
 
         private void ValidateLastUpdateTime(DateTime time)
         {
             if (time != DateTime.MinValue)
-                ModelState.AddModelError("ItemError", "LastUpdateTime cannot be set.");
+            {
+                ModelState.AddModelError(nameof(Item.LastUpdateTime), "LastUpdateTime cannot be set.");
+            }
         }
 
-        private void ShouldBeIdEmpty(Guid id, bool shouldBeEmpty)
+        private void ValidateId(Guid id, bool shouldBeEmpty)
         {
-            if (id == Guid.Empty != shouldBeEmpty)
-                ModelState.AddModelError("ItemError", shouldBeEmpty ? "Id must be empty." : "Id cannot be empty.");
+            if (shouldBeEmpty)
+            {
+                ValidateEmptyId(id);
+            }
+            else
+            {
+                ValidateNonEmptyId(id);
+            }
+        }
+
+        private void ValidateEmptyId(Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(Item.Id), "Id must be empty.");
+            }
+        }
+
+        private void ValidateNonEmptyId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(Item.Id), "Id cannot be empty.");
+            }
         }
     }
 }

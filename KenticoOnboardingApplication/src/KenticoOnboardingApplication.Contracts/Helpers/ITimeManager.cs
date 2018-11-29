@@ -4,6 +4,6 @@ namespace KenticoOnboardingApplication.Contracts.Helpers
 {
     public interface ITimeManager
     {
-        DateTime GetDateTimeNow();
+        DateTime GetCurrentTime();
     }
 }

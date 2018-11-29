@@ -1,4 +1,5 @@
-﻿using KenticoOnboardingApplication.Contracts;
+﻿using System;
+using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Services;
 using KenticoOnboardingApplication.Services.Helpers;
@@ -15,7 +16,7 @@ namespace KenticoOnboardingApplication.Services
                 .RegisterType<ICreateItemService, CreateItemService>(new HierarchicalLifetimeManager())
                 .RegisterType<IUpdateItemService, UpdateItemService>(new HierarchicalLifetimeManager())
                 .RegisterType<IGetItemService, GetItemService>(new HierarchicalLifetimeManager())
-                .RegisterType<IGuidGenerator, GuidGenerator>(new HierarchicalLifetimeManager())
+                .RegisterType<IIdGenerator<Guid>, GuidGenerator>(new HierarchicalLifetimeManager())
                 .RegisterType<ITimeManager, TimeManager>(new HierarchicalLifetimeManager());
     }
 }

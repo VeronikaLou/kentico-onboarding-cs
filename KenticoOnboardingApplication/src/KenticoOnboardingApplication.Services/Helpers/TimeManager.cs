@@ -5,6 +5,6 @@ namespace KenticoOnboardingApplication.Services.Helpers
 {
     internal class TimeManager: ITimeManager
     {
-        public DateTime GetDateTimeNow() => DateTime.UtcNow;
+        public DateTime GetCurrentTime() => DateTime.UtcNow;
     }
 }

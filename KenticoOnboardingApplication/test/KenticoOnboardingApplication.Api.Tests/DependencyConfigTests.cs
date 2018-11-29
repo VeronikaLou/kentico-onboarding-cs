@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using KenticoOnboardingApplication.Contracts;
+using KenticoOnboardingApplication.Contracts.Helpers;
 using NSubstitute;
 using NUnit.Framework;
 using Unity;
@@ -14,12 +15,14 @@ namespace KenticoOnboardingApplication.Api.Tests
     {
         private static readonly IEnumerable<Type> s_excludedContractsTypes = new[]
         {
-            typeof(IBootstrapper)
+            typeof(IBootstrapper),
+            typeof(IIdGenerator<>)
         };
 
         private static readonly IEnumerable<Type> s_expectedRegistrationTypes = new[]
         {
-            typeof(HttpRequestMessage)
+            typeof(HttpRequestMessage),
+            typeof(IIdGenerator<Guid>)
         };
 
         [Test]
@@ -31,7 +34,7 @@ namespace KenticoOnboardingApplication.Api.Tests
 
             DependencyConfig.RegisterDependencies(container);
 
-            Assert.That(resultRegistrationTypes.Except(expectedRegistrationTypes), Is.Empty, "Some redundant types were registred.");
+            Assert.That(resultRegistrationTypes.Except(expectedRegistrationTypes), Is.Empty, "Some redundant types were registered.");
             Assert.That(expectedRegistrationTypes.Except(resultRegistrationTypes), Is.Empty, "Not all expected types were registered.");
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
@@ -9,10 +10,10 @@ namespace KenticoOnboardingApplication.Services.Services
     internal class CreateItemService : ICreateItemService
     {
         private readonly IListRepository _repository;
-        private readonly IGuidGenerator _guidGenerator;
+        private readonly IIdGenerator<Guid> _guidGenerator;
         private readonly ITimeManager _timeManager;
 
-        public CreateItemService(IListRepository repository, IGuidGenerator guidGenerator, ITimeManager timeManager)
+        public CreateItemService(IListRepository repository, IIdGenerator<Guid> guidGenerator, ITimeManager timeManager)
         {
             _repository = repository;
             _guidGenerator = guidGenerator;
@@ -21,16 +22,23 @@ namespace KenticoOnboardingApplication.Services.Services
 
         public async Task<Item> CreateItemAsync(Item item)
         {
-            var dateTimeNow = _timeManager.GetDateTimeNow();
-            var newItem = new Item
-            {
-                Text = item.Text,
-                Id = _guidGenerator.GenerateId(),
-                CreationTime = dateTimeNow,
-                LastUpdateTime = dateTimeNow
-            };
+            var newItem = CreateItem(item.Text);
 
             return await _repository.AddItemAsync(newItem);
+        }
+
+        public Item CreateItem(string text)
+        {
+            var currentTime = _timeManager.GetCurrentTime();
+            var id = _guidGenerator.GenerateId();
+
+            return new Item
+            {
+                Id = id,
+                Text = text,
+                CreationTime = currentTime,
+                LastUpdateTime = currentTime
+            };
         }
     }
 }

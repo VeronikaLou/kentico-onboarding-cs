@@ -1,10 +1,11 @@
 ﻿namespace KenticoOnboardingApplication.Contracts.Models
 {
-    public class RetrievedItem
+    public class RetrievedItem<TItem> where TItem: class 
     {
-        public Item Item { get; set; }
+        public TItem Item { get; }
         public bool WasFound => Item != null;
+        public static RetrievedItem<TItem> Null = new RetrievedItem<TItem>(null);
 
-        public RetrievedItem(Item item) => Item = item;
+        public RetrievedItem(TItem item) => Item = item;
     }
 }

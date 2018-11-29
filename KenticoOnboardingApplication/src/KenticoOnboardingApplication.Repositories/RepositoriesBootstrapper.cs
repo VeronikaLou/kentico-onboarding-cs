@@ -1,8 +1,6 @@
-﻿using System.Configuration;
-using KenticoOnboardingApplication.Contracts;
+﻿using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Contracts.Repositories;
 using Unity;
-using Unity.Injection;
 using Unity.Lifetime;
 
 namespace KenticoOnboardingApplication.Repositories

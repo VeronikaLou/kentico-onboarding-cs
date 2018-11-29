@@ -36,7 +36,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         private static IEnumerable<Item> PostTestInvalidItems() =>
             new List<Item>
             {
-                new Item {Text = ""},
+                new Item {Text = String.Empty},
                 new Item(),
                 new Item
                 {
@@ -51,7 +51,7 @@ namespace KenticoOnboardingApplication.Api.Tests
             new List<Item>
             {
                 new Item {Text = "Connect JS and TS"},
-                new Item {Id = new Guid("00000000-0000-0000-0000-000000000004"), Text = ""},
+                new Item {Id = new Guid("00000000-0000-0000-0000-000000000004"), Text = String.Empty},
                 new Item {Id = new Guid("00000000-0000-0000-0000-000000000003")},
                 new Item
                 {
@@ -102,7 +102,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             _getItemService
                 .GetItemAsync(s_items[0].Id)
-                .Returns(new RetrievedItem(s_items[0]));
+                .Returns(new RetrievedItem<Item>(s_items[0]));
             var expectedValue = s_items[0];
 
             var (executedResult, item) =
@@ -128,7 +128,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             _getItemService
                 .GetItemAsync(s_items[1].Id)
-                .Returns(new RetrievedItem(null));
+                .Returns(new RetrievedItem<Item>(null));
 
             var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller => controller.GetItemAsync(s_items[1].Id));
@@ -140,18 +140,18 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task PostItem_WithValidItem_ReturnsItemAndLocationAndCreated()
         {
-            var expectedLocation = $"http://localhost/api/{s_items[1].Id}/test";
+            var expectedLocation = new Uri($"http://localhost/api/{s_items[1].Id}/test");
             var expectedValue = s_items[1];
             var postItem = s_items[1];
             postItem.Id = Guid.Empty;
             _createItemService
                 .CreateItemAsync(postItem)
                 .Returns(s_items[1]);
-            _urlLocator.GetListItemUri(s_items[1].Id).Returns(new Uri(expectedLocation));
+            _urlLocator.GetListItemUri(s_items[1].Id).Returns(expectedLocation);
 
             var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller => controller.PostItemAsync(postItem));
-            var resultLocation = executedResult.Headers.Location.ToString();
+            var resultLocation = executedResult.Headers.Location;
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(item, Is.EqualTo(expectedValue).UsingItemComparer());
@@ -175,7 +175,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             _updateItemService
                 .UpdateItemAsync(s_items[0])
-                .Returns(new RetrievedItem(s_items[0]));
+                .Returns(new RetrievedItem<Item>(s_items[0]));
             var expectedValue = s_items[0];
 
             var (executedResult, item) =
@@ -191,7 +191,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         {
             _updateItemService
                 .UpdateItemAsync(s_items[2])
-                .Returns(new RetrievedItem(null));
+                .Returns(new RetrievedItem<Item>(null));
 
             var (executedResult, item) =
                 await GetExecutedResultAndValue<Item>(controller =>
@@ -217,7 +217,7 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithExistingId_ReturnsNoContent()
         {
-            _getItemService.GetItemAsync(s_items[0].Id).Returns(new RetrievedItem(s_items[0]));
+            _getItemService.GetItemAsync(s_items[0].Id).Returns(new RetrievedItem<Item>(s_items[0]));
             var executedResult =
                 await GetExectuedResult(controller => controller.DeleteItemAsync(s_items[0].Id));
             var resultStatus = executedResult.StatusCode;
@@ -229,12 +229,23 @@ namespace KenticoOnboardingApplication.Api.Tests
         [Test]
         public async Task DeleteItem_WithNonexistingId_ReturnsNotFound()
         {
-            _getItemService.GetItemAsync(s_items[1].Id).Returns(new RetrievedItem(null));
+            _getItemService.GetItemAsync(s_items[1].Id).Returns(new RetrievedItem<Item>(null));
             var executedResult =
                 await GetExectuedResult(controller => controller.DeleteItemAsync(s_items[1].Id));
             var resultStatus = executedResult.StatusCode;
 
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+        [Test]
+        public async Task DeleteItem_WithEmptyId_ReturnsBadRequest()
+        {
+            var executedResult =
+                await GetExectuedResult(controller => controller.DeleteItemAsync(Guid.Empty));
+            var resultStatus = executedResult.StatusCode;
+
+            _repository.DidNotReceive();
+            Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         private async Task<(HttpResponseMessage executedResult, T value)> GetExecutedResultAndValue<T>(

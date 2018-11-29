@@ -32,7 +32,7 @@ namespace KenticoOnboardingApplication.Services.Tests
         public async Task UpdateItemAsync_WithItemFromDb_ReturnsItemAndTrue()
         {
             var (expectedItem, itemForUpdate) = GetExpectedItemAndItemForUpdate();
-            Arrange(expectedItem, itemForUpdate);
+            ArrangeTestAccordingToItem(expectedItem, itemForUpdate);
 
             var result = await _updateItemService.UpdateItemAsync(itemForUpdate);
 
@@ -41,14 +41,14 @@ namespace KenticoOnboardingApplication.Services.Tests
         }
 
         [Test]
-        public async Task UpdateItemAsync_WithItemNotFromDb_ReturnsNullAdnFalse()
+        public async Task UpdateItemAsync_WithItemNotFromDb_ReturnsNullAndFalse()
         {
             var item = new Item
             {
                 Id = new Guid("00000000-0000-0000-0000-000000000007"),
                 Text = "different text",
             };
-            _getItemService.GetItemAsync(item.Id).Returns(new RetrievedItem(null));
+            _getItemService.GetItemAsync(item.Id).Returns(new RetrievedItem<Item>(null));
 
             var result = await _updateItemService.UpdateItemAsync(item);
 
@@ -56,10 +56,10 @@ namespace KenticoOnboardingApplication.Services.Tests
             Assert.That(result.WasFound, Is.False);
         }
 
-        private void Arrange(Item expectedItem, Item itemForUpdate)
+        private void ArrangeTestAccordingToItem(Item expectedItem, Item itemForUpdate)
         {
-            _timeManager.GetDateTimeNow().Returns(expectedItem.LastUpdateTime);
-            _getItemService.GetItemAsync(itemForUpdate.Id).Returns(new RetrievedItem(itemForUpdate));
+            _timeManager.GetCurrentTime().Returns(expectedItem.LastUpdateTime);
+            _getItemService.GetItemAsync(itemForUpdate.Id).Returns(new RetrievedItem<Item>(itemForUpdate));
             _repository
                 .UpdateItemAsync(Arg.Is<Item>(comparedItem => ComparerWraper.AreItemsEqual(comparedItem, expectedItem)))
                 .Returns(expectedItem);
