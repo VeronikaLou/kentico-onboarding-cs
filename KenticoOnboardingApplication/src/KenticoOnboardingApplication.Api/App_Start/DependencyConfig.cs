@@ -18,7 +18,7 @@ namespace KenticoOnboardingApplication.Api
         internal static void RegisterDependencies(IUnityContainer container) =>
             container
                 .Register<ApiBootstrapper>()
-                .Register<RepositoriesBootstraper>();
+                .Register<RepositoriesBootstrapper>();
 
         private static IUnityContainer Register<T>(this IUnityContainer container)
             where T : IBootstrapper, new() =>
