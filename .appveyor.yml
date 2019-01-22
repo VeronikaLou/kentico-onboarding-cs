@@ -9,3 +9,5 @@ test:
    except:
     - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Api.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
     - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Tests.Base/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Contracts.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Services.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll

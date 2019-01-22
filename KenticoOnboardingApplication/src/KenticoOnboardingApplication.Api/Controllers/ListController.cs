@@ -6,6 +6,7 @@ using KenticoOnboardingApplication.Api.Helpers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
+using KenticoOnboardingApplication.Contracts.Services;
 using Microsoft.Web.Http;
 
 namespace KenticoOnboardingApplication.Api.Controllers
@@ -17,19 +18,35 @@ namespace KenticoOnboardingApplication.Api.Controllers
     {
         private readonly IListRepository _repository;
         private readonly IUrlLocator _urlLocator;
+        private readonly IGetItemService _getItemService;
 
-        public ListController(IListRepository repository, IUrlLocator locator)
+        public ListController(IListRepository repository, IUrlLocator locator, IGetItemService getItemService)
         {
             _repository = repository;
             _urlLocator = locator;
+            _getItemService = getItemService;
         }
 
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
             Ok(await _repository.GetAllItemsAsync());
 
         [Route("{id:guid}", Name = UrlLocator.RouteGet)]
-        public async Task<IHttpActionResult> GetItemAsync(Guid id) =>
-            Ok(await _repository.GetItemAsync(id));
+        public async Task<IHttpActionResult> GetItemAsync(Guid id)
+        {
+            ValidateNonEmptyId(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _getItemService.GetItemAsync(id);
+            if (!result.WasFound)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Item);
+        }
 
         public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
@@ -49,6 +66,14 @@ namespace KenticoOnboardingApplication.Api.Controllers
             await _repository.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        private void ValidateNonEmptyId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(Item.Id), "Item's id must not be empty.");
+            }
         }
     }
 }

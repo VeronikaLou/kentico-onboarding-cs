@@ -134,6 +134,10 @@
       <Project>{EFA2D6BD-0055-4FC6-B10E-44C7E24014A0}</Project>
       <Name>KenticoOnboardingApplication.Repositories</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KenticoOnboardingApplication.Services\KenticoOnboardingApplication.Services.csproj">
+      <Project>{5FDF72F7-BC50-4501-BF05-5DD5644F22BE}</Project>
+      <Name>KenticoOnboardingApplication.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

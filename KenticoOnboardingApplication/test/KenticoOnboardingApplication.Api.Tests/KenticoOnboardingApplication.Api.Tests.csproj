@@ -111,6 +111,10 @@
       <Project>{8940F20B-E14D-488C-85BA-BA4F0CF5A575}</Project>
       <Name>KenticoOnboardingApplication.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KenticoOnboardingApplication.Tests.Base\KenticoOnboardingApplication.Tests.Base.csproj">
+      <Project>{D9D61B20-F3F0-4E50-B1EF-28B2D2562D1F}</Project>
+      <Name>KenticoOnboardingApplication.Tests.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
