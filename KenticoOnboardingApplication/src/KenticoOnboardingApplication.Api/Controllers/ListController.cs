@@ -19,12 +19,14 @@ namespace KenticoOnboardingApplication.Api.Controllers
         private readonly IListRepository _repository;
         private readonly IUrlLocator _urlLocator;
         private readonly IGetItemService _getItemService;
+        private readonly ICreateItemService _createItemService;
 
-        public ListController(IListRepository repository, IUrlLocator locator, IGetItemService getItemService)
+        public ListController(IListRepository repository, IUrlLocator locator, IGetItemService getItemService, ICreateItemService createItemService)
         {
             _repository = repository;
             _urlLocator = locator;
             _getItemService = getItemService;
+            _createItemService = createItemService;
         }
 
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
@@ -50,8 +52,15 @@ namespace KenticoOnboardingApplication.Api.Controllers
 
         public async Task<IHttpActionResult> PostItemAsync([FromBody] Item value)
         {
-            var uri = _urlLocator.GetListItemUri(value.Id);
-            var item = await _repository.AddItemAsync(value);
+            ValidateTextAndDateTimes(value);
+            ValidateEmptyId(value.Id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var item = await _createItemService.CreateItemAsync(value);
+            var uri = _urlLocator.GetListItemUri(item.Id);
 
             return Created(uri, item);
         }
@@ -75,5 +84,46 @@ namespace KenticoOnboardingApplication.Api.Controllers
                 ModelState.AddModelError(nameof(Item.Id), "Item's id must not be empty.");
             }
         }
+
+
+        private void ValidateEmptyId(Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(Item.Id), "Item's id must be empty.");
+            }
+        }
+
+        private void ValidateTextAndDateTimes(Item item)
+        {
+            ValidateText(item.Text);
+            ValidateLastUpdateTime(item.LastUpdateTime);
+            ValidateCreationTime(item.CreationTime);
+        }
+
+        private void ValidateText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                ModelState.AddModelError(nameof(Item.Text), "Item's text must not be empty.");
+            }
+        }
+
+        private void ValidateCreationTime(DateTime time)
+        {
+            if (time != DateTime.MinValue)
+            {
+                ModelState.AddModelError(nameof(Item.CreationTime), "The time of item's creation must not be set.");
+            }
+        }
+
+        private void ValidateLastUpdateTime(DateTime time)
+        {
+            if (time != DateTime.MinValue)
+            {
+                ModelState.AddModelError(nameof(Item.LastUpdateTime), "The time of item's last update must not be set.");
+            }
+        }
+
     }
 }

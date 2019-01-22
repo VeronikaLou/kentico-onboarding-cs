@@ -52,7 +52,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\IdGeneratorTests.cs" />
+    <Compile Include="Helpers\TimeManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CreateItemTests.cs" />
     <Compile Include="Services\GetItemTests.cs" />
   </ItemGroup>
   <ItemGroup>
