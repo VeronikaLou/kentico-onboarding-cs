@@ -26,6 +26,7 @@ namespace KenticoOnboardingApplication.Api.Tests.Controllers
         private IUrlLocator _urlLocator;
         private IGetItemService _getItemService;
         private ICreateItemService _createItemService;
+        private IUpdateItemService _updateItemService;
 
         private static IEnumerable<(Item errorneousItem, string responseValidationKey)> PostTestInvalidItems() =>
             new List<(Item, string)>
@@ -38,6 +39,17 @@ namespace KenticoOnboardingApplication.Api.Tests.Controllers
                     nameof(Item.LastUpdateTime)),
             };
 
+        private static IEnumerable<(Item errorneousItem, string responseValidationKey)> PutTestInvalidItems() =>
+            new List<(Item, string)>
+            {
+                (ItemsCreator.CreateItem(text: "Id is not set."), nameof(Item.Id)),
+                (ItemsCreator.CreateItem(id: "00000000-0000-0000-0000-000000000001"), nameof(Item.Text)),
+                (ItemsCreator.CreateItem(id: "00000000-0000-0000-0000-000000000002", text: "Set creationTime", creationTime: "2005-05-05"),
+                    nameof(Item.CreationTime)),
+                (ItemsCreator.CreateItem(id: "00000000-0000-0000-0000-000000000003", text: "Set LastUpdateTime", lastUpdateTime: "2012-12-21"),
+                    nameof(Item.LastUpdateTime))
+            };
+
         [SetUp]
         public void SetUp()
         {
@@ -45,8 +57,10 @@ namespace KenticoOnboardingApplication.Api.Tests.Controllers
             _urlLocator = Substitute.For<IUrlLocator>();
             _getItemService = Substitute.For<IGetItemService>();
             _createItemService = Substitute.For<ICreateItemService>();
+            _updateItemService = Substitute.For<IUpdateItemService>();
 
-            _controller = new ListController(_repository, _urlLocator, _getItemService, _createItemService)
+            _controller = new ListController(_repository, _urlLocator, _getItemService, _createItemService,
+                _updateItemService)
             {
                 Configuration = new HttpConfiguration(),
                 Request = new HttpRequestMessage()
@@ -144,16 +158,54 @@ namespace KenticoOnboardingApplication.Api.Tests.Controllers
         }
 
         [Test]
-        public async Task PutItem_WithItemAndGuid_ReturnsItemAndOk()
+        public async Task PutItem_WithItemFromDb_ReturnsItemAndOk()
         {
-            var itemToPut = ItemsCreator.CreateItem("00000000-0000-0000-0000-000000000001", "Learn C#");
-            _repository.UpdateItemAsync(itemToPut).Returns(Task.FromResult(itemToPut));
+            var expectedResult = ItemsCreator.CreateItemAndRetrievedItem(id: "00000000-0000-0000-0000-000000000001", text: "Learn C#");
+            _updateItemService
+                .UpdateItemAsync(expectedResult.item)
+                .Returns(expectedResult.retrievedItem);
 
             var (executedResult, item) =
-                await GetExecutedResultAndValue<Item>(controller => controller.PutItemAsync(itemToPut.Id, itemToPut));
+                await GetExecutedResultAndValue<Item>(controller =>
+                    controller.PutItemAsync(expectedResult.item.Id, expectedResult.item));
 
             Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(item, Is.EqualTo(itemToPut).UsingItemComparer());
+            Assert.That(item, Is.EqualTo(expectedResult.item));
+        }
+
+
+        [Test]
+        public async Task PutItem_WithItemWhichIsNotInDb_CallsPostItemReturnsItemAndCreated()
+        {
+            var itemToPut = ItemsCreator.CreateItem(id: "00000000-0000-0000-0000-000000000003", text: "Connect JS and TS");
+            var itemToPost = ItemsCreator.CreateItem(text: itemToPut.Text);
+            var expectedItem = ItemsCreator.CreateItem(id: "00000000-0000-0000-0000-000000000002", text: itemToPost.Text);
+            var expectedLocation = new Uri($"http://localhost/api/{expectedItem.Id}/test");
+            ArrangeUrlLocatorAndCreateItemService(expectedItem, itemToPost, expectedLocation);
+
+            _updateItemService
+                .UpdateItemAsync(itemToPut)
+                .Returns(RetrievedItem<Item>.Empty);
+
+            var (executedResult, item) =
+                await GetExecutedResultAndValue<Item>(controller =>
+                    controller.PutItemAsync(itemToPut.Id, itemToPut));
+
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            Assert.That(item, Is.EqualTo(expectedItem));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(PutTestInvalidItems))]
+        public async Task PutItem_WithInvalidItem_ReturnsBadRequest((Item item, string responseValidationKey) itemWithError)
+        {
+            var (executedResult, error) =
+                await GetExecutedResultAndValue<HttpError>(controller =>
+                    controller.PutItemAsync(itemWithError.item.Id, itemWithError.item));
+
+            Assert.That(error.ModelState, Has.One.Items);
+            Assert.That(error.ModelState, Does.ContainKey(itemWithError.responseValidationKey));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         [Test]

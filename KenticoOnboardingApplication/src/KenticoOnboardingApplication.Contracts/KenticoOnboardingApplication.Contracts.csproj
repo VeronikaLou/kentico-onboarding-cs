@@ -72,6 +72,7 @@
     <Compile Include="Repositories\IListRepository.cs" />
     <Compile Include="Services\ICreateItemService.cs" />
     <Compile Include="Services\IGetItemService.cs" />
+    <Compile Include="Services\IUpdateItemService.cs" />
     <Compile Include="Services\Wrappers\RetrievedItem.cs" />
   </ItemGroup>
   <ItemGroup>
