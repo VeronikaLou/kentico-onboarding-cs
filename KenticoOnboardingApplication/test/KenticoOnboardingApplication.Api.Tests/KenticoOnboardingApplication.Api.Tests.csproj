@@ -91,7 +91,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\EqualConstraintExtensions.cs" />
     <Compile Include="App_Start\DependencyConfigTests.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

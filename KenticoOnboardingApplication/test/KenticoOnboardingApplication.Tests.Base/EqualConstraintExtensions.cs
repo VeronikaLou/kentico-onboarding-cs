@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using KenticoOnboardingApplication.Contracts.Models;
-using NUnit.Framework.Constraints;
 
-namespace KenticoOnboardingApplication.Api.Tests.Comparers
+namespace KenticoOnboardingApplication.Tests.Base
 {
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     internal static class ComparerWraper
