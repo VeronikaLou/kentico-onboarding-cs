@@ -1,36 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using KenticoOnboardingApplication.Contracts.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+using KenticoOnboardingApplication.Tests.Base.Comparers;
+using NUnit.Framework.Constraints;
 
 namespace KenticoOnboardingApplication.Tests.Base
 {
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
-    internal static class ComparerWraper
+    public static class ComparerWrapper
     {
-        private static Lazy<ItemComparer> LazyComparer => new Lazy<ItemComparer>();
-
-        private sealed class ItemComparer : IEqualityComparer<Item>
-        {
-            public bool Equals(Item first, Item second)
-            {
-                if (first == null && second == null)
-                {
-                    return true;
-                }
-
-                if (first == null || second == null)
-                {
-                    return false;
-                }
-
-                return first.Id == second.Id && first.Text == second.Text;
-            }
-
-            public int GetHashCode(Item item) => item.Id.GetHashCode() + item.Text.GetHashCode();
-        }
-
         public static EqualConstraint UsingItemComparer(this EqualConstraint constraint) =>
-            constraint.Using(LazyComparer.Value);
+            constraint.Using(ItemComparer.LazyComparer);
+
+        public static EqualConstraint UsingRetrievedItemComparer(this EqualConstraint constraint) =>
+            constraint.Using(RetrievedItemComparer.LazyComparer);
     }
 }
