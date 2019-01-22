@@ -20,13 +20,16 @@ namespace KenticoOnboardingApplication.Api.Controllers
         private readonly IUrlLocator _urlLocator;
         private readonly IGetItemService _getItemService;
         private readonly ICreateItemService _createItemService;
+        private readonly IUpdateItemService _updateItemService;
 
-        public ListController(IListRepository repository, IUrlLocator locator, IGetItemService getItemService, ICreateItemService createItemService)
+        public ListController(IListRepository repository, IUrlLocator locator, IGetItemService getItemService,
+            ICreateItemService createItemService, IUpdateItemService updateItemService)
         {
             _repository = repository;
             _urlLocator = locator;
             _getItemService = getItemService;
             _createItemService = createItemService;
+            _updateItemService = updateItemService;
         }
 
         public async Task<IHttpActionResult> GetAllItemsAsync() =>
@@ -66,8 +69,24 @@ namespace KenticoOnboardingApplication.Api.Controllers
         }
 
         [Route("{id:guid}")]
-        public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value) =>
-            Ok(await _repository.UpdateItemAsync(value));
+        public async Task<IHttpActionResult> PutItemAsync(Guid id, [FromBody] Item value)
+        {
+            ValidateTextAndDateTimes(value);
+            ValidateNonEmptyId(value.Id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _updateItemService.UpdateItemAsync(value);
+            if (!result.WasFound)
+            {
+                value.Id = Guid.Empty;
+                return await PostItemAsync(value);
+            }
+
+            return Ok(result.Item);
+        }
 
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
@@ -124,6 +143,5 @@ namespace KenticoOnboardingApplication.Api.Controllers
                 ModelState.AddModelError(nameof(Item.LastUpdateTime), "The time of item's last update must not be set.");
             }
         }
-
     }
 }

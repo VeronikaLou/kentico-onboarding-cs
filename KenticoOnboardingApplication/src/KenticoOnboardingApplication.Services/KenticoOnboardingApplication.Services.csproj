@@ -75,6 +75,7 @@
     <Compile Include="ServicesBootstrapper.cs" />
     <Compile Include="Services\CreateItemService.cs" />
     <Compile Include="Services\GetItemService.cs" />
+    <Compile Include="Services\UpdateItemService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
