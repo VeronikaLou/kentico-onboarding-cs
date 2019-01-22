@@ -209,15 +209,45 @@ namespace KenticoOnboardingApplication.Api.Tests.Controllers
         }
 
         [Test]
-        public async Task DeleteItem_WithId_ReturnsNoContent()
+        public async Task DeleteItem_WithExistingId_ReturnsNoContent()
         {
-            var itemToDelete = ItemsCreator.CreateItem("00000000-0000-0000-0000-000000000001", "Learn C#");
-            var executedResult = await GetExecutedResult(controller => controller.DeleteItemAsync(itemToDelete.Id));
+            var (item, retrievedItem) = ItemsCreator.CreateItemAndRetrievedItem(id: "00000000-0000-0000-0000-000000000001", text: "Learn C#");
+            _getItemService.GetItemAsync(item.Id).Returns(retrievedItem);
+
+            var executedResult =
+                await GetExecutedResult(controller => controller.DeleteItemAsync(item.Id));
             var resultStatus = executedResult.StatusCode;
 
-            await _repository.Received().DeleteItemAsync(itemToDelete.Id);
+            await _repository.Received().DeleteItemAsync(item.Id);
             Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NoContent));
         }
+        
+        [Test]
+        public async Task DeleteItem_WithNotExistingId_ReturnsNotFound()
+        {
+            var id = new Guid("00000000-0000-0000-0000-000000000002");
+            _getItemService.GetItemAsync(id).Returns(RetrievedItem<Item>.Empty);
+
+            var executedResult =
+                await GetExecutedResult(controller => controller.DeleteItemAsync(id));
+            var resultStatus = executedResult.StatusCode;
+
+            Assert.That(resultStatus, Is.EqualTo(HttpStatusCode.NotFound));
+        }
+
+
+        [Test]
+        public async Task DeleteItem_WithEmptyId_ReturnsBadRequest()
+        {
+            var (executedResult, error) =
+                await GetExecutedResultAndValue<HttpError>(controller => controller.DeleteItemAsync(Guid.Empty));
+
+            _repository.DidNotReceive();
+            Assert.That(error.ModelState, Has.One.Items);
+            Assert.That(error.ModelState, Does.ContainKey(nameof(Item.Id)));
+            Assert.That(executedResult.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
 
         private async Task<(HttpResponseMessage executedResult, T value)> GetExecutedResultAndValue<T>(
             Func<ListController, Task<IHttpActionResult>> action)
