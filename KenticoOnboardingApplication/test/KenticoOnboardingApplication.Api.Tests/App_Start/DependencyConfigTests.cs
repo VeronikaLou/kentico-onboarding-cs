@@ -7,7 +7,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Unity;
 
-namespace KenticoOnboardingApplication.Api.Tests
+namespace KenticoOnboardingApplication.Api.Tests.App_Start
 {
     [TestFixture]
     public class DependencyConfigTests

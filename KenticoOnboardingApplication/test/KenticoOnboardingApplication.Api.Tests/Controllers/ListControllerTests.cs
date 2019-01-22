@@ -4,16 +4,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using KenticoOnboardingApplication.Api.Controllers;
-using NUnit.Framework;
 using System.Web.Http;
+using KenticoOnboardingApplication.Api.Controllers;
 using KenticoOnboardingApplication.Api.Tests.Comparers;
 using KenticoOnboardingApplication.Contracts.Helpers;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
 using NSubstitute;
+using NUnit.Framework;
 
-namespace KenticoOnboardingApplication.Api.Tests
+namespace KenticoOnboardingApplication.Api.Tests.Controllers
 {
     [TestFixture]
     public class ListControllerTests
