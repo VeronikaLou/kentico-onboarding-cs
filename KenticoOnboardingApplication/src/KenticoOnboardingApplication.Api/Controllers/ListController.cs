@@ -91,6 +91,18 @@ namespace KenticoOnboardingApplication.Api.Controllers
         [Route("{id:guid}")]
         public async Task<IHttpActionResult> DeleteItemAsync(Guid id)
         {
+            ValidateNonEmptyId(id);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var retrievedItem = await _getItemService.GetItemAsync(id);
+            if (!retrievedItem.WasFound)
+            {
+                return NotFound();
+            }
+
             await _repository.DeleteItemAsync(id);
 
             return StatusCode(HttpStatusCode.NoContent);
