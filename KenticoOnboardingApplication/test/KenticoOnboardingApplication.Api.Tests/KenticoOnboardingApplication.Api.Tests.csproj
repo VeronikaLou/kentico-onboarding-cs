@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DependencyConfigTests.cs" />
+    <Compile Include="Controllers\ListControllerIntegrationTest.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\UrlLocatorTests.cs" />
