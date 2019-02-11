@@ -5,7 +5,7 @@ using KenticoOnboardingApplication.Api.Helpers;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace KenticoOnboardingApplication.Api.Tests
+namespace KenticoOnboardingApplication.Api.Tests.Helpers
 {
     [TestFixture]
     public class UrlLocatorTests

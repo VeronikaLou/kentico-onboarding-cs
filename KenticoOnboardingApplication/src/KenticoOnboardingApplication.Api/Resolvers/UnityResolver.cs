@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dependencies;
-using System.Web.Http.Description;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Hosting;
+using System.Web.Http.Metadata;
+using System.Web.Http.Validation;
 using Unity;
 using Unity.Exceptions;
-using Unity.Resolution;
 
 namespace KenticoOnboardingApplication.Api.Resolvers
 {
@@ -26,7 +26,9 @@ namespace KenticoOnboardingApplication.Api.Resolvers
             nameof(IHttpActionSelector),
             nameof(IHttpActionInvoker),
             nameof(IContentNegotiator),
-            nameof(IExceptionHandler)
+            nameof(IExceptionHandler),
+            nameof(ModelMetadataProvider),
+            nameof(IModelValidatorCache)
         };
 
         public UnityResolver(IUnityContainer container) =>

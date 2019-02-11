@@ -3,26 +3,43 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KenticoOnboardingApplication.Contracts.Models;
 using KenticoOnboardingApplication.Contracts.Repositories;
+using MongoDB.Driver;
 
 namespace KenticoOnboardingApplication.Repositories.Repositories
 {
     internal class ListRepository : IListRepository
     {
-        private static readonly Item[] Items =
+        private static IMongoCollection<Item> _collection;
+
+        public ListRepository(IConnectionStrings connectionString)
         {
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000001"), Text = "Learn C#"},
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000002"), Text = "Create dummy controller"},
-            new Item {Id = new Guid("00000000-0000-0000-0000-000000000003"), Text = "Connect JS and TS"}
-        };
+            var urlConnectionString = MongoUrl.Create(connectionString.Mongo);
+            var client = new MongoClient(urlConnectionString);
+            var db = client.GetDatabase(urlConnectionString.DatabaseName);
+            _collection = db.GetCollection<Item>("items");
+        }
 
-        public async Task<IEnumerable<Item>> GetAllItemsAsync() => await Task.FromResult(Items);
+        public async Task<IEnumerable<Item>> GetAllItemsAsync() =>
+            await _collection.Find(FilterDefinition<Item>.Empty).ToListAsync();
 
-        public async Task<Item> GetItemAsync(Guid id) => await Task.FromResult(Items[0]);
+        public async Task<Item> GetItemAsync(Guid id) =>
+            await _collection.Find(item => item.Id == id).FirstOrDefaultAsync();
 
-        public async Task<Item> AddItemAsync(Item item) => await Task.FromResult(Items[1]);
+        public async Task<Item> AddItemAsync(Item item)
+        {
+            await _collection.InsertOneAsync(item);
 
-        public async Task<Item> UpdateItemAsync(Item item) => await Task.FromResult(Items[0]);
+            return item;
+        }
 
-        public async Task DeleteItemAsync(Guid id) => await Task.CompletedTask;
+        public async Task<Item> UpdateItemAsync(Item item)
+        {
+            await _collection.FindOneAndReplaceAsync(foundItem => foundItem.Id == item.Id, item);
+
+            return item;
+        }
+
+        public async Task DeleteItemAsync(Guid id) =>
+            await _collection.DeleteOneAsync(item => item.Id == id);
     }
 }

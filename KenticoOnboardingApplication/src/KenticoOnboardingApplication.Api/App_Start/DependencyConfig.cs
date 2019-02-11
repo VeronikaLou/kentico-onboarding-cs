@@ -2,6 +2,7 @@
 using KenticoOnboardingApplication.Api.Resolvers;
 using KenticoOnboardingApplication.Contracts;
 using KenticoOnboardingApplication.Repositories;
+using KenticoOnboardingApplication.Services;
 using Unity;
 
 namespace KenticoOnboardingApplication.Api
@@ -18,10 +19,11 @@ namespace KenticoOnboardingApplication.Api
         internal static void RegisterDependencies(IUnityContainer container) =>
             container
                 .Register<ApiBootstrapper>()
-                .Register<RepositoriesBootstraper>();
+                .Register<RepositoriesBootstrapper>()
+                .Register<ServicesBootstrapper>();
 
-        private static IUnityContainer Register<T>(this IUnityContainer container)
-            where T : IBootstrapper, new() =>
-            new T().Register(container);
+        private static IUnityContainer Register<TBootstrapper>(this IUnityContainer container)
+            where TBootstrapper : IBootstrapper, new() =>
+            new TBootstrapper().Register(container);
     }
 }

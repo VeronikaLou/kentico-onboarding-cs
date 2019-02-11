@@ -91,11 +91,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\EqualConstraintExtensions.cs" />
-    <Compile Include="DependencyConfigTests.cs" />
-    <Compile Include="ListControllerTests.cs" />
+    <Compile Include="App_Start\DependencyConfigTests.cs" />
+    <Compile Include="Controllers\ListControllerIntegrationTest.cs" />
+    <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UrlLocatorTests.cs" />
+    <Compile Include="Helpers\UrlLocatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -111,6 +111,10 @@
     <ProjectReference Include="..\..\src\KenticoOnboardingApplication.Contracts\KenticoOnboardingApplication.Contracts.csproj">
       <Project>{8940F20B-E14D-488C-85BA-BA4F0CF5A575}</Project>
       <Name>KenticoOnboardingApplication.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KenticoOnboardingApplication.Tests.Base\KenticoOnboardingApplication.Tests.Base.csproj">
+      <Project>{D9D61B20-F3F0-4E50-B1EF-28B2D2562D1F}</Project>
+      <Name>KenticoOnboardingApplication.Tests.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -3,3 +3,11 @@ version: '1.0.{build}'
 image: Visual Studio 2017
 before_build:
   - nuget restore ./KenticoOnboardingApplication/KenticoOnboardingApplication.sln
+  
+test:
+ assemblies:
+   except:
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Api.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Tests.Base/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Contracts.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll
+    - ./KenticoOnboardingApplication/test/KenticoOnboardingApplication.Services.Tests/bin/Debug/KenticoOnboardingApplication.Tests.Base.dll

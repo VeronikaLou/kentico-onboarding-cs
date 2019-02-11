@@ -5,9 +5,9 @@ using Unity.Lifetime;
 
 namespace KenticoOnboardingApplication.Repositories
 {
-    public class RepositoriesBootstraper : IBootstrapper
+    public class RepositoriesBootstrapper : IBootstrapper
     {
         public IUnityContainer Register(IUnityContainer container) =>
-            container.RegisterType<IListRepository, Repositories.ListRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IListRepository, Repositories.ListRepository>(new ContainerControlledLifetimeManager());
     }
 }
